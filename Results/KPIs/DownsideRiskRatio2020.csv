@@ -1,0 +1,9 @@
+"","first_MVP_top4","first_MVP_bottom4","first_maxSR_top4","first_maxSR_bottom4","first_EW_top4","first_EW_bottom4","first_InvInef_top4","first_InvInef_bottom4"
+"daily downside risk",0.038,0.031,0.042,0.0403,0.0388,0.0308,0.0382,0.0316
+"Annualised downside risk",0.6027,0.4914,0.6661,0.6399,0.6152,0.4894,0.607,0.5017
+"Downside potential",0.0159,0.0097,0.0159,0.0146,0.017,0.0113,0.0163,0.0116
+"Omega",1.1818,1.386,1.0013,1.1879,1.1316,1.1747,1.1362,1.1657
+"Sortino ratio",0.0762,0.1214,5e-04,0.0679,0.0577,0.0643,0.058,0.061
+"Upside potential",0.0188,0.0135,0.0159,0.0173,0.0192,0.0133,0.0185,0.0136
+"Upside potential ratio",0.5816,0.4921,0.5095,0.5123,0.6069,0.4918,0.5773,0.4881
+"Omega-sharpe ratio",0.1818,0.386,0.0013,0.1879,0.1316,0.1747,0.1362,0.1657
