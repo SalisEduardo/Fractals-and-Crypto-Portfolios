@@ -146,25 +146,25 @@ effic_ranks <- effic_ranks[c('Ticker',"RankEffic_2018_2019", "RankEffic_2019_202
 #write.csv(effic_ranks,"Results/Fractality/ranks_deltaH.csv")
 
 ## Portfolios build with 4 crypto currencies
-top_4_first <- get_top_effic_names(effic_ranks,"RankEffic_2018_2019",top_effics = 4)
-bottom_4_first <- get_top_effic_names(effic_ranks,"RankEffic_2018_2019",top_effics = -4)
+top4_first <- get_top_effic_names(effic_ranks,"RankEffic_2018_2019",top_effics = 4)
+bottom4_first <- get_top_effic_names(effic_ranks,"RankEffic_2018_2019",top_effics = -4)
 
-top_4_second <- get_top_effic_names(effic_ranks,"RankEffic_2019_2020",top_effics = 4)
-bottom_4_second <- get_top_effic_names(effic_ranks,"RankEffic_2019_2020",top_effics = -4)
+top4_second <- get_top_effic_names(effic_ranks,"RankEffic_2019_2020",top_effics = 4)
+bottom4_second <- get_top_effic_names(effic_ranks,"RankEffic_2019_2020",top_effics = -4)
 
-top_4_third <- get_top_effic_names(effic_ranks,"RankEffic_2020_2021",top_effics = 4)
-bottom_4_third <- get_top_effic_names(effic_ranks,"RankEffic_2020_2021",top_effics = -4)
+top4_third <- get_top_effic_names(effic_ranks,"RankEffic_2020_2021",top_effics = 4)
+bottom4_third <- get_top_effic_names(effic_ranks,"RankEffic_2020_2021",top_effics = -4)
 
 ## Portfolios build with 8 crypto currencies
 
-top_8_first <- get_top_effic_names(effic_ranks,"RankEffic_2018_2019",top_effics = 8)
-bottom_8_first <- get_top_effic_names(effic_ranks,"RankEffic_2018_2019",top_effics = -8)
+top8_first <- get_top_effic_names(effic_ranks,"RankEffic_2018_2019",top_effics = 8)
+bottom8_first <- get_top_effic_names(effic_ranks,"RankEffic_2018_2019",top_effics = -8)
 
-top_8_second <- get_top_effic_names(effic_ranks,"RankEffic_2019_2020",top_effics = 8)
-bottom_8_second <- get_top_effic_names(effic_ranks,"RankEffic_2019_2020",top_effics = -8)
+top8_second <- get_top_effic_names(effic_ranks,"RankEffic_2019_2020",top_effics = 8)
+bottom8_second <- get_top_effic_names(effic_ranks,"RankEffic_2019_2020",top_effics = -8)
 
-top_8_third <- get_top_effic_names(effic_ranks,"RankEffic_2020_2021",top_effics = 8)
-bottom_8_third <- get_top_effic_names(effic_ranks,"RankEffic_2020_2021",top_effics = -8)
+top8_third <- get_top_effic_names(effic_ranks,"RankEffic_2020_2021",top_effics = 8)
+bottom8_third <- get_top_effic_names(effic_ranks,"RankEffic_2020_2021",top_effics = -8)
 
 #----------------------------------------------------------------------------------------------------------
 
@@ -179,14 +179,14 @@ plot_V1_crypto_correlation <- GGally::ggcorr(crypto_returns_xts['2018/'],method 
 plot_V2_crypto_correlation <- corrplot.mixed(cor(crypto_returns_xts['2018/']), order = 'AOE')
 
 
-
+#--------------------------------------------------------------------------------------------------------------------
 # Strategies - (short sell restriction) - 4 assets within portfolios
 
 ## Minimum Variance Portfolios
 
 ### More Efficient cryptos
 first_MVP_top4 <-  build.portfolio.strats("first_MVP_top4" ,
-                                          top_4_first,
+                                          top4_first,
                                           crypto_returns_xts,
                                           first_train_period,
                                           first_test_period,
@@ -195,7 +195,7 @@ first_MVP_top4 <-  build.portfolio.strats("first_MVP_top4" ,
                                           neg_to_zero = TRUE)
 
 second_MVP_top4 <-  build.portfolio.strats("second_MVP_top4" ,
-                                           top_4_second,
+                                           top4_second,
                                            crypto_returns_xts,
                                            second_train_period,
                                            second_test_period,
@@ -204,7 +204,7 @@ second_MVP_top4 <-  build.portfolio.strats("second_MVP_top4" ,
                                            neg_to_zero = TRUE)
 
 third_MVP_top4 <-  build.portfolio.strats("third_MVP_top4" ,
-                                          top_4_third,
+                                          top4_third,
                                           crypto_returns_xts,
                                           third_train_period,
                                           third_test_period,
@@ -221,7 +221,7 @@ top4_MVP_returns <- rbind(first_MVP_top4$R,second_MVP_top4$R,third_MVP_top4$R)
 
 
 first_MVP_bottom4 <-  build.portfolio.strats("first_MVP_bottom4" ,
-                                          bottom_4_first,
+                                          bottom4_first,
                                           crypto_returns_xts,
                                           first_train_period,
                                           first_test_period,
@@ -231,7 +231,7 @@ first_MVP_bottom4 <-  build.portfolio.strats("first_MVP_bottom4" ,
 
 
 second_MVP_bottom4 <-  build.portfolio.strats("second_MVP_bottom4" ,
-                                             bottom_4_second,
+                                             bottom4_second,
                                              crypto_returns_xts,
                                              second_train_period,
                                              second_test_period,
@@ -241,7 +241,7 @@ second_MVP_bottom4 <-  build.portfolio.strats("second_MVP_bottom4" ,
 
 
 third_MVP_bottom4 <-  build.portfolio.strats("third_MVP_bottom4" ,
-                                             bottom_4_third,
+                                             bottom4_third,
                                              crypto_returns_xts,
                                              third_train_period,
                                              third_test_period,
@@ -256,7 +256,7 @@ bottom4_MVP_returns <- rbind(first_MVP_bottom4$R,second_MVP_bottom4$R,third_MVP_
 
 ### More Efficient cryptos
 first_maxSR_top4 <-  build.portfolio.strats("first_maxSR_top4" ,
-                                              top_4_first,
+                                              top4_first,
                                               crypto_returns_xts,
                                               first_train_period,
                                               first_test_period,
@@ -267,7 +267,7 @@ first_maxSR_top4 <-  build.portfolio.strats("first_maxSR_top4" ,
 
 
 second_maxSR_top4 <-  build.portfolio.strats("second_maxSR_top4" ,
-                                            top_4_second,
+                                            top4_second,
                                             crypto_returns_xts,
                                             second_train_period,
                                             second_test_period,
@@ -278,7 +278,7 @@ second_maxSR_top4 <-  build.portfolio.strats("second_maxSR_top4" ,
 
 
 third_maxSR_top4 <-  build.portfolio.strats("third_maxSR_top4" ,
-                                            top_4_third,
+                                            top4_third,
                                             crypto_returns_xts,
                                             third_train_period,
                                             third_test_period,
@@ -293,7 +293,7 @@ top4_maxSR_returns <- rbind(first_maxSR_top4$R,second_maxSR_top4$R,third_maxSR_t
 ### More Inefficient cryptos
 
 first_maxSR_bottom4 <-  build.portfolio.strats("first_maxSR_bottom4" ,
-                                            bottom_4_first,
+                                            bottom4_first,
                                             crypto_returns_xts,
                                             first_train_period,
                                             first_test_period,
@@ -304,7 +304,7 @@ first_maxSR_bottom4 <-  build.portfolio.strats("first_maxSR_bottom4" ,
 
 
 second_maxSR_bottom4 <-  build.portfolio.strats("second_maxSR_bottom4" ,
-                                             bottom_4_second,
+                                             bottom4_second,
                                              crypto_returns_xts,
                                              second_train_period,
                                              second_test_period,
@@ -315,7 +315,7 @@ second_maxSR_bottom4 <-  build.portfolio.strats("second_maxSR_bottom4" ,
 
 
 third_maxSR_bottom4 <-  build.portfolio.strats("third_maxSR_bottom4" ,
-                                            bottom_4_third,
+                                            bottom4_third,
                                             crypto_returns_xts,
                                             third_train_period,
                                             third_test_period,
@@ -334,19 +334,19 @@ top4_maxSR_returns <- rbind(first_maxSR_top4$R,second_maxSR_top4$R,third_maxSR_t
 ### More Efficient cryptos
 
 first_EW_top4 <- build.EW.portfolio("first_EW_top4" ,
-                                    top_4_first,
+                                    top4_first,
                                     crypto_returns_xts,
                                     first_train_period,
                                     first_test_period)
 
 second_EW_top4 <- build.EW.portfolio("second_EW_top4" ,
-                                    top_4_second,
+                                    top4_second,
                                     crypto_returns_xts,
                                     second_train_period,
                                     second_test_period)
 
 third_EW_top4 <- build.EW.portfolio("third_EW_top4" ,
-                                    top_4_third,
+                                    top4_third,
                                     crypto_returns_xts,
                                     third_train_period,
                                     third_test_period)
@@ -358,19 +358,19 @@ top4_EW_returns <- rbind(first_EW_top4$R,second_EW_top4$R,third_EW_top4$R)
 
 
 first_EW_bottom4 <- build.EW.portfolio("first_EW_bottom4" ,
-                                    bottom_4_first,
+                                    bottom4_first,
                                     crypto_returns_xts,
                                     first_train_period,
                                     first_test_period)
 
 second_EW_bottom4 <- build.EW.portfolio("second_EW_bottom4" ,
-                                       bottom_4_second,
+                                       bottom4_second,
                                        crypto_returns_xts,
                                        second_train_period,
                                        second_test_period)
 
 third_EW_bottom4 <- build.EW.portfolio("third_EW_bottom4" ,
-                                       bottom_4_third,
+                                       bottom4_third,
                                        crypto_returns_xts,
                                        third_train_period,
                                        third_test_period)
@@ -384,9 +384,9 @@ top4_EW_returns <- rbind(first_EW_bottom4$R,second_EW_bottom4$R,third_EW_bottom4
 
 
 
-top4_first_weights_InvInef <- format.InvInef.weights.df(first_deltaH,colnames(first_deltaH)[2],top_4_first)
-top4_second_weights_InvInef <- format.InvInef.weights.df(second_deltaH,colnames(second_deltaH)[2],top_4_second)
-top4_third_weights_InvInef <- format.InvInef.weights.df(third_deltaH,colnames(third_deltaH)[2],top_4_third)
+top4_first_weights_InvInef <- format.InvInef.weights.df(first_deltaH,colnames(first_deltaH)[2],top4_first)
+top4_second_weights_InvInef <- format.InvInef.weights.df(second_deltaH,colnames(second_deltaH)[2],top4_second)
+top4_third_weights_InvInef <- format.InvInef.weights.df(third_deltaH,colnames(third_deltaH)[2],top4_third)
 
 first_InvInef_top4 <- build.inverse.inefficency.strategy("first_InvInef_top4",
                                                     top4_first_weights_InvInef,
@@ -411,9 +411,9 @@ third_InvInef_top4 <- build.inverse.inefficency.strategy("third_InvInef_top4",
 top4_InvInef_returns <- rbind(first_InvInef_top4$R,second_InvInef_top4$R,third_InvInef_top4$R)
 
 
-bottom4_first_weights_InvInef <- format.InvInef.weights.df(first_deltaH,colnames(first_deltaH)[2],bottom_4_first)
-bottom4_second_weights_InvInef <- format.InvInef.weights.df(second_deltaH,colnames(second_deltaH)[2],bottom_4_second)
-bottom4_third_weights_InvInef <- format.InvInef.weights.df(third_deltaH,colnames(third_deltaH)[2],bottom_4_third)
+bottom4_first_weights_InvInef <- format.InvInef.weights.df(first_deltaH,colnames(first_deltaH)[2],bottom4_first)
+bottom4_second_weights_InvInef <- format.InvInef.weights.df(second_deltaH,colnames(second_deltaH)[2],bottom4_second)
+bottom4_third_weights_InvInef <- format.InvInef.weights.df(third_deltaH,colnames(third_deltaH)[2],bottom4_third)
 
 
 first_InvInef_bottom4 <- build.inverse.inefficency.strategy("first_InvInef_bottom4",
@@ -440,14 +440,13 @@ bottom4_InvInef_returns <- rbind(first_InvInef_bottom4$R,second_InvInef_bottom4$
 
 
 
-#----------------------------------------------------------------------------------------------------------
 
 # Results
 
 
 
 
-all_strategies <- list(first_MVP_top4,
+strategies_4assets <- list(first_MVP_top4,
                        first_MVP_bottom4,
                        first_maxSR_top4,
                        first_maxSR_bottom4,
@@ -475,14 +474,14 @@ all_strategies <- list(first_MVP_top4,
 
 
 
-results2020 <- get.strats.KPIs(all_strategies,name_pattern='first',RF = 0,year_file = '2020',folder_name='Results/KPIs',export = TRUE)
-results2021 <- get.strats.KPIs(all_strategies,name_pattern='second',RF = 0,year_file = '2021',folder_name='Results/KPIs',export = TRUE)
-results2022 <- get.strats.KPIs(all_strategies,name_pattern='third',RF = 0,year_file = '2022',folder_name='Results/KPIs',export = TRUE)
+results2020_4assets <- get.strats.KPIs(strategies_4assets,name_pattern='first',RF = 0,year_file = '2020',folder_name='Results/KPIs/4assets/',export = TRUE)
+results2021_4assets <- get.strats.KPIs(strategies_4assets,name_pattern='second',RF = 0,year_file = '2021',folder_name='Results/KPIs/4assets/',export = TRUE)
+results2022_4assets <- get.strats.KPIs(strategies_4assets,name_pattern='third',RF = 0,year_file = '2022',folder_name='Results/KPIs/4assets/',export = TRUE)
 
 
 
-for(s in all_strategies){
-  file_name <-paste("Results/Summary_plots/",s$name,'.png',sep = '')
+for(s in strategies_4assets){
+  file_name <-paste("Results/Summary_plots/4assets/",s$name,'.png',sep = '')
   png(file_name)
   charts.PerformanceSummary(s$R,main = s$name)
   dev.off()
@@ -491,17 +490,332 @@ for(s in all_strategies){
 }
 
 
-top4_2020_weights <- get_table_strats_weights(all_strategies,"first","top4",folder_path = 'Results/Weights/',export = TRUE) 
-top4_2021_weights <- get_table_strats_weights(all_strategies,"second","top4",folder_path = 'Results/Weights/',export = TRUE)
-top4_2022_weights <- get_table_strats_weights(all_strategies,"third","top4",folder_path = 'Results/Weights/',export = TRUE)
+top4_2020_weights <- get_table_strats_weights(strategies_4assets,"first","top4",folder_path = 'Results/Weights/4assets/',export = TRUE) 
+top4_2021_weights <- get_table_strats_weights(strategies_4assets,"second","top4",folder_path = 'Results/Weights/4assets/',export = TRUE)
+top4_2022_weights <- get_table_strats_weights(strategies_4assets,"third","top4",folder_path = 'Results/Weights/4assets/',export = TRUE)
 
-bottom4_2020_weights <- get_table_strats_weights(all_strategies,"first","bottom4",folder_path = 'Results/Weights/',export = TRUE) 
-bottom4_2021_weights <- get_table_strats_weights(all_strategies,"second","bottom4",folder_path = 'Results/Weights/',export = TRUE) 
-bottom4_2022_weights <- get_table_strats_weights(all_strategies,"third","bottom4",folder_path = 'Results/Weights/',export = TRUE) 
+bottom4_2020_weights <- get_table_strats_weights(strategies_4assets,"first","bottom4",folder_path = 'Results/Weights/4assets/',export = TRUE) 
+bottom4_2021_weights <- get_table_strats_weights(strategies_4assets,"second","bottom4",folder_path = 'Results/Weights/4assets/',export = TRUE) 
+bottom4_2022_weights <- get_table_strats_weights(strategies_4assets,"third","bottom4",folder_path = 'Results/Weights/4assets/',export = TRUE) 
+
+#------------------------------------------------------------------------------------------------------------------------------
+
+# Strategies - (short sell restriction) - 8 assets within portfolios
+
+
+
+first_MVP_top8 <-  build.portfolio.strats("first_MVP_top8" ,
+                                          top8_first,
+                                          crypto_returns_xts,
+                                          first_train_period,
+                                          first_test_period,
+                                          pspec.lo.full,
+                                          mvp.spec,
+                                          neg_to_zero = TRUE)
+
+second_MVP_top8 <-  build.portfolio.strats("second_MVP_top8" ,
+                                           top8_second,
+                                           crypto_returns_xts,
+                                           second_train_period,
+                                           second_test_period,
+                                           pspec.lo.full,
+                                           mvp.spec,
+                                           neg_to_zero = TRUE)
+
+third_MVP_top8 <-  build.portfolio.strats("third_MVP_top8" ,
+                                          top8_third,
+                                          crypto_returns_xts,
+                                          third_train_period,
+                                          third_test_period,
+                                          pspec.lo.full,
+                                          mvp.spec,
+                                          neg_to_zero = TRUE)
+
+
+
+top8_MVP_returns <- rbind(first_MVP_top8$R,second_MVP_top8$R,third_MVP_top8$R)
+
+
+### More Inefficient cryptos
+
+
+first_MVP_bottom8 <-  build.portfolio.strats("first_MVP_bottom8" ,
+                                             bottom8_first,
+                                             crypto_returns_xts,
+                                             first_train_period,
+                                             first_test_period,
+                                             pspec.lo.full,
+                                             mvp.spec,
+                                             neg_to_zero = TRUE)
+
+
+second_MVP_bottom8 <-  build.portfolio.strats("second_MVP_bottom8" ,
+                                              bottom8_second,
+                                              crypto_returns_xts,
+                                              second_train_period,
+                                              second_test_period,
+                                              pspec.lo.full,
+                                              mvp.spec,
+                                              neg_to_zero = TRUE)
+
+
+third_MVP_bottom8 <-  build.portfolio.strats("third_MVP_bottom8" ,
+                                             bottom8_third,
+                                             crypto_returns_xts,
+                                             third_train_period,
+                                             third_test_period,
+                                             pspec.lo.full,
+                                             mvp.spec,
+                                             neg_to_zero = TRUE)
+
+
+bottom8_MVP_returns <- rbind(first_MVP_bottom8$R,second_MVP_bottom8$R,third_MVP_bottom8$R)
+
+## Max Sharpe ---->  not diversifying
+
+### More Efficient cryptos
+first_maxSR_top8 <-  build.portfolio.strats("first_maxSR_top8" ,
+                                            top8_first,
+                                            crypto_returns_xts,
+                                            first_train_period,
+                                            first_test_period,
+                                            pspec.lo.full,
+                                            tp.sepc,
+                                            maxSharp = TRUE,
+                                            neg_to_zero = TRUE)
+
+
+second_maxSR_top8 <-  build.portfolio.strats("second_maxSR_top8" ,
+                                             top8_second,
+                                             crypto_returns_xts,
+                                             second_train_period,
+                                             second_test_period,
+                                             pspec.lo.full,
+                                             tp.sepc,
+                                             maxSharp = TRUE,
+                                             neg_to_zero = TRUE)
+
+
+third_maxSR_top8 <-  build.portfolio.strats("third_maxSR_top8" ,
+                                            top8_third,
+                                            crypto_returns_xts,
+                                            third_train_period,
+                                            third_test_period,
+                                            pspec.lo.full,
+                                            tp.sepc,
+                                            maxSharp = TRUE,
+                                            neg_to_zero = TRUE)
+
+
+top8_maxSR_returns <- rbind(first_maxSR_top8$R,second_maxSR_top8$R,third_maxSR_top8$R)
+
+### More Inefficient cryptos
+
+first_maxSR_bottom8 <-  build.portfolio.strats("first_maxSR_bottom8" ,
+                                               bottom8_first,
+                                               crypto_returns_xts,
+                                               first_train_period,
+                                               first_test_period,
+                                               pspec.lo.full,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE)
+
+
+second_maxSR_bottom8 <-  build.portfolio.strats("second_maxSR_bottom8" ,
+                                                bottom8_second,
+                                                crypto_returns_xts,
+                                                second_train_period,
+                                                second_test_period,
+                                                pspec.lo.full,
+                                                tp.sepc,
+                                                maxSharp = TRUE,
+                                                neg_to_zero = TRUE)
+
+
+third_maxSR_bottom8 <-  build.portfolio.strats("third_maxSR_bottom8" ,
+                                               bottom8_third,
+                                               crypto_returns_xts,
+                                               third_train_period,
+                                               third_test_period,
+                                               pspec.lo.full,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE)
+
+
+
+top8_maxSR_returns <- rbind(first_maxSR_top8$R,second_maxSR_top8$R,third_maxSR_top8$R)
+
+
+# EW 
+
+### More Efficient cryptos
+
+first_EW_top8 <- build.EW.portfolio("first_EW_top8" ,
+                                    top8_first,
+                                    crypto_returns_xts,
+                                    first_train_period,
+                                    first_test_period)
+
+second_EW_top8 <- build.EW.portfolio("second_EW_top8" ,
+                                     top8_second,
+                                     crypto_returns_xts,
+                                     second_train_period,
+                                     second_test_period)
+
+third_EW_top8 <- build.EW.portfolio("third_EW_top8" ,
+                                    top8_third,
+                                    crypto_returns_xts,
+                                    third_train_period,
+                                    third_test_period)
+
+
+top8_EW_returns <- rbind(first_EW_top8$R,second_EW_top8$R,third_EW_top8$R)
+
+### More Inefficient cryptos
+
+
+first_EW_bottom8 <- build.EW.portfolio("first_EW_bottom8" ,
+                                       bottom8_first,
+                                       crypto_returns_xts,
+                                       first_train_period,
+                                       first_test_period)
+
+second_EW_bottom8 <- build.EW.portfolio("second_EW_bottom8" ,
+                                        bottom8_second,
+                                        crypto_returns_xts,
+                                        second_train_period,
+                                        second_test_period)
+
+third_EW_bottom8 <- build.EW.portfolio("third_EW_bottom8" ,
+                                       bottom8_third,
+                                       crypto_returns_xts,
+                                       third_train_period,
+                                       third_test_period)
+
+
+
+top8_EW_returns <- rbind(first_EW_bottom8$R,second_EW_bottom8$R,third_EW_bottom8$R)
+
+
+# Inverse Inefficency 
+
+
+
+top8_first_weights_InvInef <- format.InvInef.weights.df(first_deltaH,colnames(first_deltaH)[2],top8_first)
+top8_second_weights_InvInef <- format.InvInef.weights.df(second_deltaH,colnames(second_deltaH)[2],top8_second)
+top8_third_weights_InvInef <- format.InvInef.weights.df(third_deltaH,colnames(third_deltaH)[2],top8_third)
+
+first_InvInef_top8 <- build.inverse.inefficency.strategy("first_InvInef_top8",
+                                                         top8_first_weights_InvInef,
+                                                         crypto_returns_xts,
+                                                         first_train_period,
+                                                         first_test_period)
+
+second_InvInef_top8 <- build.inverse.inefficency.strategy("second_InvInef_top8",
+                                                          top8_second_weights_InvInef,
+                                                          crypto_returns_xts,
+                                                          second_train_period,
+                                                          second_test_period)
+
+third_InvInef_top8 <- build.inverse.inefficency.strategy("third_InvInef_top8",
+                                                         top8_third_weights_InvInef,
+                                                         crypto_returns_xts,
+                                                         third_train_period,
+                                                         third_test_period)
+
+
+
+top8_InvInef_returns <- rbind(first_InvInef_top8$R,second_InvInef_top8$R,third_InvInef_top8$R)
+
+
+bottom8_first_weights_InvInef <- format.InvInef.weights.df(first_deltaH,colnames(first_deltaH)[2],bottom8_first)
+bottom8_second_weights_InvInef <- format.InvInef.weights.df(second_deltaH,colnames(second_deltaH)[2],bottom8_second)
+bottom8_third_weights_InvInef <- format.InvInef.weights.df(third_deltaH,colnames(third_deltaH)[2],bottom8_third)
+
+
+first_InvInef_bottom8 <- build.inverse.inefficency.strategy("first_InvInef_bottom8",
+                                                            bottom8_first_weights_InvInef,
+                                                            crypto_returns_xts,
+                                                            first_train_period,
+                                                            first_test_period)
+
+second_InvInef_bottom8 <- build.inverse.inefficency.strategy("second_InvInef_bottom8",
+                                                             bottom8_second_weights_InvInef,
+                                                             crypto_returns_xts,
+                                                             second_train_period,
+                                                             second_test_period)
+
+third_InvInef_bottom8 <- build.inverse.inefficency.strategy("third_InvInef_bottom8",
+                                                            bottom8_third_weights_InvInef,
+                                                            crypto_returns_xts,
+                                                            third_train_period,
+                                                            third_test_period)
+
+
+bottom8_InvInef_returns <- rbind(first_InvInef_bottom8$R,second_InvInef_bottom8$R,third_InvInef_bottom8$R)
 
 
 
 
+#----------------------------------------------------------------------------------------------------------
 
+# Results
+
+
+
+
+strategies_8assets <- list(first_MVP_top8,
+                           first_MVP_bottom8,
+                           first_maxSR_top8,
+                           first_maxSR_bottom8,
+                           first_EW_top8,
+                           first_EW_bottom8,
+                           first_InvInef_top8,
+                           first_InvInef_bottom8,
+                           second_MVP_top8,
+                           second_MVP_bottom8,
+                           second_maxSR_top8,
+                           second_maxSR_bottom8,
+                           second_EW_top8,
+                           second_EW_bottom8,
+                           second_InvInef_top8,
+                           second_InvInef_bottom8,
+                           third_MVP_top8,
+                           third_MVP_bottom8,
+                           third_maxSR_top8,
+                           third_maxSR_bottom8,
+                           third_EW_top8,
+                           third_EW_bottom8,
+                           third_InvInef_top8,
+                           third_InvInef_bottom8)
+
+
+
+
+results2020_8assets <- get.strats.KPIs(strategies_8assets,name_pattern='first',RF = 0,year_file = '2020',folder_name='Results/KPIs/8assets/',export = TRUE)
+results2021_8assets <- get.strats.KPIs(strategies_8assets,name_pattern='second',RF = 0,year_file = '2021',folder_name='Results/KPIs/8assets/',export = TRUE)
+results2022_8assets <- get.strats.KPIs(strategies_8assets,name_pattern='third',RF = 0,year_file = '2022',folder_name='Results/KPIs/8assets/',export = TRUE)
+
+
+
+for(s in strategies_8assets){
+  file_name <-paste("Results/Summary_plots/8assets/",s$name,'.png',sep = '')
+  png(file_name)
+  charts.PerformanceSummary(s$R,main = s$name)
+  dev.off()
+  
+  
+}
+
+
+top8_2020_weights <- get_table_strats_weights(strategies_8assets,"first","top8",folder_path = 'Results/Weights/8assets/',export = TRUE) 
+top8_2021_weights <- get_table_strats_weights(strategies_8assets,"second","top8",folder_path = 'Results/Weights/8assets/',export = TRUE)
+top8_2022_weights <- get_table_strats_weights(strategies_8assets,"third","top8",folder_path = 'Results/Weights/8assets/',export = TRUE)
+
+bottom8_2020_weights <- get_table_strats_weights(strategies_8assets,"first","bottom8",folder_path = 'Results/Weights/8assets/',export = TRUE) 
+bottom8_2021_weights <- get_table_strats_weights(strategies_8assets,"second","bottom8",folder_path = 'Results/Weights/8assets/',export = TRUE) 
+bottom8_2022_weights <- get_table_strats_weights(strategies_8assets,"third","bottom8",folder_path = 'Results/Weights/8assets/',export = TRUE) 
 
 

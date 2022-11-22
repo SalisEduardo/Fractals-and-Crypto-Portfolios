@@ -382,7 +382,7 @@ get_table_strats_weights <- function(strategies_list,period_name,group_name,fold
   
   DFweights <- NULL
   rnames <- c()
-  for(s in all_strategies){
+  for(s in strategies_list){
     if((grepl(period_name,s$name) == TRUE) && (grepl(group_name,s$name) == TRUE) && (grepl("_EW_",s$name)==FALSE) ){
       strat_name <- str_extract_all(s$name,"(?<=_).+(?=_)")[[1]]
       rnames <- append(rnames,strat_name)
