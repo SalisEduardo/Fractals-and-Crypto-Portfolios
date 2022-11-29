@@ -20,7 +20,7 @@ library(RColorBrewer)
 source("functions.R")
 
 
-#Data
+# Data ------------------------------------
 
 excel_origin_date = "1899-12-30"
 
@@ -115,9 +115,9 @@ crypto_returns_xts <- xts(as.data.frame(crypto_returns[,-1]),order.by=crypto_ret
 crypto_returns_xts['2018/'] 
 
 
-#----------------------------------------------------------------------------------------------------------------
+# Selecting by efficiency----------------------------------------------------------------------------------------------------------------
 
-# Selecting by efficiency
+
 
 first_train_period <- "2018/2019"
 first_test_period <- "2020"
@@ -166,9 +166,9 @@ bottom8_second <- get_top_effic_names(effic_ranks,"RankEffic_2019_2020",top_effi
 top8_third <- get_top_effic_names(effic_ranks,"RankEffic_2020_2021",top_effics = 8)
 bottom8_third <- get_top_effic_names(effic_ranks,"RankEffic_2020_2021",top_effics = -8)
 
-#----------------------------------------------------------------------------------------------------------
+# Individual Performance of each crypto----------------------------------------------------------------------------------------------------------
 
-# Individual Performance of each crypto
+
 
 
 crypto.Performance_18_22 <- performance_summary_v1(crypto_returns_xts['2018/'])
@@ -179,8 +179,8 @@ plot_V1_crypto_correlation <- GGally::ggcorr(crypto_returns_xts['2018/'],method 
 plot_V2_crypto_correlation <- corrplot.mixed(cor(crypto_returns_xts['2018/']), order = 'AOE')
 
 
-#--------------------------------------------------------------------------------------------------------------------
-# Strategies - (short sell restriction) - 4 assets within portfolios
+# Strategies - (short sell restriction) - 4 assets within portfolios--------------------------------------------------------------------------------------------------------------------
+
 
 ## Minimum Variance Portfolios
 
@@ -498,11 +498,7 @@ bottom4_2020_weights <- get_table_strats_weights(strategies_4assets,"first","bot
 bottom4_2021_weights <- get_table_strats_weights(strategies_4assets,"second","bottom4",folder_path = 'Results/Weights/4assets/',export = TRUE) 
 bottom4_2022_weights <- get_table_strats_weights(strategies_4assets,"third","bottom4",folder_path = 'Results/Weights/4assets/',export = TRUE) 
 
-#------------------------------------------------------------------------------------------------------------------------------
-
-# Strategies - (short sell restriction) - 8 assets within portfolios
-
-
+# Strategies - (short sell restriction) - 8 assets within portfolios------------------------------------------------------------------------------------------------------------------------------
 
 first_MVP_top8 <-  build.portfolio.strats("first_MVP_top8" ,
                                           top8_first,
@@ -759,9 +755,9 @@ bottom8_InvInef_returns <- rbind(first_InvInef_bottom8$R,second_InvInef_bottom8$
 
 
 
-#----------------------------------------------------------------------------------------------------------
+## Results
 
-# Results
+
 
 
 
@@ -817,5 +813,12 @@ top8_2022_weights <- get_table_strats_weights(strategies_8assets,"third","top8",
 bottom8_2020_weights <- get_table_strats_weights(strategies_8assets,"first","bottom8",folder_path = 'Results/Weights/8assets/',export = TRUE) 
 bottom8_2021_weights <- get_table_strats_weights(strategies_8assets,"second","bottom8",folder_path = 'Results/Weights/8assets/',export = TRUE) 
 bottom8_2022_weights <- get_table_strats_weights(strategies_8assets,"third","bottom8",folder_path = 'Results/Weights/8assets/',export = TRUE) 
+
+
+
+# Analysis of results --------------------------------
+
+
+
 
 

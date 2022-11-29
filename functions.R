@@ -8,6 +8,7 @@ library(covRobust)
 library(quantmod)
 library(tidyverse)
 library(dplyr)
+library(purrr)
 library(ggplot2)
 library(readxl)
 library(MFDFA)
@@ -17,9 +18,7 @@ library(nonlinearTseries)
 library(bizdays)
 library(plyr)
 library(ggdark)
-#---------------------------------------------------------------------------------------------------
-#Specs
-#---------------------------------------------------------------------------------------------------
+#Specs---------------------------------------------------------------------------------------------------
 
 
 ## Long only , full investment
@@ -38,9 +37,8 @@ pspec.box.full <- function(assets_names, min_box=0,max_box=1){
 }
 
 
-#---------------------------------------------------------------------------------------------------
-# Allocation
-#---------------------------------------------------------------------------------------------------
+#Allocation---------------------------------------------------------------------------------------------------
+
 
 
 ### Minimum variance portfolio
@@ -86,9 +84,8 @@ minCVaR.spec <- function(p,args=list(p=0.95,clean="boudt",method='historical'),c
 
 
 
-#---------------------------------------------------------------------------------------------------
-# Strats implementation
-#---------------------------------------------------------------------------------------------------
+#Strats implementation---------------------------------------------------------------------------------------------------
+
 
 build.portfolio.strats <- function(strats_name,assets_names,return_series,train_period,test_period,base_specs,strats_specs,optimizor='ROI',maxSharp=FALSE,neg_to_zero=FALSE){
   portfolio_specs <- assets_names %>% base_specs %>% strats_specs
@@ -196,9 +193,7 @@ build.inverse.inefficency.strategy <- function(strats_name,initial_weights,retur
 
 
 
-#---------------------------------------------------------------------------------------------------
-#Results and KPIS functions
-#---------------------------------------------------------------------------------------------------
+#Results and KPIS functions------------------------------------------------------------------
 
 table.modigliani <- function(R,period,riskfree,start_date = "2019-01-01",end_date = "2022-09-29"){
   sp500 <- quantmod::getSymbols("^GSPC", auto.assign = FALSE, from = as.Date(start_date), to = as.Date(end_date)) %>%
@@ -409,9 +404,8 @@ get_table_strats_weights <- function(strategies_list,period_name,group_name,fold
 
 
 
-#---------------------------------------------------------------------------------------------------
+# Fractality---------------------------------------------------------------------------------------------------
 
-#Fractality
 
 calcMDM <- function(x, N= dim(x)[1],scale=10:(N/4),q=-4:4,m=1){
   b <- MFDFA(x, scale, m, q)
@@ -454,8 +448,38 @@ get_top_effic_names <- function(df_ranks,rankCol,top_effics){
   return(names)
 }
 
-#---------------------------------------------------------------------------------------------------
+# Data Transform-----------------------------------------------------------------------
 
+gatther_Rets <- function(strategies_list,name_pattern = NULL){
+  if(is.null(name_pattern) == FALSE){
+    strategies_list <- keep(strategies_list, function(s) grepl(name_pattern,s$name))
+  }
+  
+  returns_list <- lapply(strategies_list, function(x){x$R})
+  names_col <- lapply(strategies_list, function(x){x$name}) 
+  
+  series_returns <- do.call(merge,returns_list)
+  
+  colnames(series_returns) <- names_col
+  series_returns <- series_returns %>% fortify.zoo %>% as.tibble() %>%  dplyr::rename("Date" = Index )
 
+  return(series_returns)
+  
+}
 
+returns_to_longer <- function(returns_gatthered){
+  returns_gatthered[,-1] <- ((returns_gatthered[,-1] + 1) %>%  cumprod()) -1 #cummulative returns
+  long_df <- returns_gatthered %>%  gather(key = "Strat", value = "return", -Date)
+  return(long_df)
+}
+
+# Data Visualization ----------------------------------------------------------------
+
+plot_compared_performance <- function(df_long_rets){
+  df_long_rets %>%  ggplot(aes(x=Date,y=return)) +
+    geom_line(aes(color = Strat), size = 1) +
+    labs(x="Data",y='Retorno Acumulado',title = 'Desempenho das carteiras')+
+    theme_classic()
+  
+}
 
