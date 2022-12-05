@@ -1,0 +1,12 @@
+"","second_EW"
+"Semi Deviation",0.045
+"Gain Deviation",0.0337
+"Loss Deviation",0.05
+"Downside Deviation (MAR=0%)",0.0433
+"Downside Deviation (Rf=0%)",0.0433
+"Downside Deviation (0%)",0.0433
+"Maximum Drawdown",0.7466
+"Historical VaR (95%)",-0.0809
+"Historical ES (95%)",-0.1404
+"Modified VaR (95%)",-0.1016
+"Modified ES (95%)",-0.2302

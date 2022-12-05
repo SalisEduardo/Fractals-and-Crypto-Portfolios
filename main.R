@@ -112,7 +112,13 @@ crypto_returns <- crypto_dataframe %>%
 
 crypto_returns_xts <- xts(as.data.frame(crypto_returns[,-1]),order.by=crypto_returns$Date)
 
-crypto_returns_xts['2018/'] 
+crypto_mktCap <- crypto_dataframe %>% 
+  dplyr::select(Date,ends_with("MarketCap")) %>% 
+  arrange(Date) %>% 
+  rename_with(~str_remove(., '.MarketCap'))
+
+
+crypto_mktCap_xts <- xts(as.data.frame(crypto_mktCap[,-1]),order.by=crypto_mktCap$Date)
 
 
 # Selecting by efficiency----------------------------------------------------------------------------------------------------------------
@@ -146,8 +152,8 @@ effic_ranks <- effic_ranks[c('Ticker',"RankEffic_2018_2019", "RankEffic_2019_202
 #write.csv(effic_ranks,"Results/Fractality/ranks_deltaH.csv")
 
 ## Portfolios build with 4 crypto currencies
-top4_first <- get_top_effic_names(effic_ranks,"RankEffic_2018_2019",top_effics = 4)
-bottom4_first <- get_top_effic_names(effic_ranks,"RankEffic_2018_2019",top_effics = -4)
+top4_first <- get_top_effic_names(effic_ranks,"RankEffic_2018_2019",top_effics = 4) #top ranks gets a positive sign
+bottom4_first <- get_top_effic_names(effic_ranks,"RankEffic_2018_2019",top_effics = -4) #bottom ranks gets a positive sign
 
 top4_second <- get_top_effic_names(effic_ranks,"RankEffic_2019_2020",top_effics = 4)
 bottom4_second <- get_top_effic_names(effic_ranks,"RankEffic_2019_2020",top_effics = -4)
@@ -377,7 +383,7 @@ third_EW_bottom4 <- build.EW.portfolio("third_EW_bottom4" ,
 
 
 
-top4_EW_returns <- rbind(first_EW_bottom4$R,second_EW_bottom4$R,third_EW_bottom4$R)
+bottom4_EW_returns <- rbind(first_EW_bottom4$R,second_EW_bottom4$R,third_EW_bottom4$R)
 
 
 # Inverse Inefficency 
@@ -641,7 +647,7 @@ third_maxSR_bottom8 <-  build.portfolio.strats("third_maxSR_bottom8" ,
 
 
 
-top8_maxSR_returns <- rbind(first_maxSR_top8$R,second_maxSR_top8$R,third_maxSR_top8$R)
+bottom8_maxSR_returns <- rbind(first_maxSR_bottom8$R,second_maxSR_bottom8$R,third_maxSR_bottom8$R)
 
 
 # EW 
@@ -692,7 +698,7 @@ third_EW_bottom8 <- build.EW.portfolio("third_EW_bottom8" ,
 
 
 
-top8_EW_returns <- rbind(first_EW_bottom8$R,second_EW_bottom8$R,third_EW_bottom8$R)
+bottom8_EW_returns <- rbind(first_EW_bottom8$R,second_EW_bottom8$R,third_EW_bottom8$R)
 
 
 # Inverse Inefficency 
@@ -813,12 +819,6 @@ top8_2022_weights <- get_table_strats_weights(strategies_8assets,"third","top8",
 bottom8_2020_weights <- get_table_strats_weights(strategies_8assets,"first","bottom8",folder_path = 'Results/Weights/8assets/',export = TRUE) 
 bottom8_2021_weights <- get_table_strats_weights(strategies_8assets,"second","bottom8",folder_path = 'Results/Weights/8assets/',export = TRUE) 
 bottom8_2022_weights <- get_table_strats_weights(strategies_8assets,"third","bottom8",folder_path = 'Results/Weights/8assets/',export = TRUE) 
-
-
-
-# Analysis of results --------------------------------
-
-
 
 
 

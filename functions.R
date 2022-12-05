@@ -37,7 +37,7 @@ pspec.box.full <- function(assets_names, min_box=0,max_box=1){
 }
 
 
-#Allocation---------------------------------------------------------------------------------------------------
+# Allocation---------------------------------------------------------------------------------------------------
 
 
 
@@ -84,7 +84,7 @@ minCVaR.spec <- function(p,args=list(p=0.95,clean="boudt",method='historical'),c
 
 
 
-#Strats implementation---------------------------------------------------------------------------------------------------
+# Strats implementation---------------------------------------------------------------------------------------------------
 
 
 build.portfolio.strats <- function(strats_name,assets_names,return_series,train_period,test_period,base_specs,strats_specs,optimizor='ROI',maxSharp=FALSE,neg_to_zero=FALSE){
@@ -193,7 +193,7 @@ build.inverse.inefficency.strategy <- function(strats_name,initial_weights,retur
 
 
 
-#Results and KPIS functions------------------------------------------------------------------
+# Results and KPIS functions------------------------------------------------------------------
 
 table.modigliani <- function(R,period,riskfree,start_date = "2019-01-01",end_date = "2022-09-29"){
   sp500 <- quantmod::getSymbols("^GSPC", auto.assign = FALSE, from = as.Date(start_date), to = as.Date(end_date)) %>%
@@ -467,19 +467,41 @@ gatther_Rets <- function(strategies_list,name_pattern = NULL){
   
 }
 
-returns_to_longer <- function(returns_gatthered){
-  returns_gatthered[,-1] <- ((returns_gatthered[,-1] + 1) %>%  cumprod()) -1 #cummulative returns
+calc_cumrets <- function(rets_table){
+  
+  rets_table[,-1] <- ((rets_table[,-1] + 1) %>%  cumprod()) -1 #first column is the date index
+  
+  return(rets_table)
+  
+}
+
+cumrets_to_longer <- function(returns_gatthered,create_group = TRUE){
+  #returns_gatthered[,-1] <- ((returns_gatthered[,-1] + 1) %>%  cumprod()) -1 #cummulative returns
+  returns_gatthered <- returns_gatthered %>%  calc_cumrets()
   long_df <- returns_gatthered %>%  gather(key = "Strat", value = "return", -Date)
+  if(create_group){
+    long_df$group_strat <- ifelse(grepl("top",long_df$Strat),'top','bottom')
+  }
+  
   return(long_df)
 }
 
 # Data Visualization ----------------------------------------------------------------
 
-plot_compared_performance <- function(df_long_rets){
+plot_compared_performance <- function(df_long_rets,title_plot,color_colum=group_strat){
   df_long_rets %>%  ggplot(aes(x=Date,y=return)) +
-    geom_line(aes(color = Strat), size = 1) +
-    labs(x="Data",y='Retorno Acumulado',title = 'Desempenho das carteiras')+
+    geom_line(aes(color = {{color_colum}}), size = 1) +
+    labs(x="Date",y='Cummulative Returns',title = title_plot)+
     theme_classic()
   
 }
+
+export_plots <- function(plot_image,file_path){
+  png(file_name)
+  plot_image
+  dev.off()
+}
+
+
+
 
