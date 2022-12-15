@@ -257,7 +257,27 @@ table.modigliani <- function(R,period,riskfree,start_date = "2019-01-01",end_dat
   
 }
 
+totalReturn <- function(R){
+  cumRets <- cumprod(1 + R) - 1
+  TotalRets <- cumRets %>%  coredata() %>%  tail(1)
+  rownames(TotalRets) <- c("Total Return")
+  #TotalRets <- TotalRets * 100 # Percentage
+  return(TotalRets)
+  
+}
+
+totalReturn_v2 <- function(R){
+  cumRets <- prod(1 + R) - 1
+  #TotalRets <- cumRets %>%  coredata() %>%  tail(1)
+  #rownames(TotalRets) <- c("Total Return")
+  #TotalRets <- TotalRets * 100 # Percentage
+  return(cumRets)
+  
+}
+
+
 get.strats.KPIs <- function(strategies_list,name_pattern,RF, year_file,folder_name='KPIs',mar= 0,prob=0.95,export=FALSE){
+  df_totalRets <- data.frame()
   df_returns_all <- data.frame()
   df_dist_all <- data.frame()
   df_DR_all <- data.frame()
@@ -269,6 +289,11 @@ get.strats.KPIs <- function(strategies_list,name_pattern,RF, year_file,folder_na
   for (s in strategies_list){
     if(grepl(name_pattern,s$name)){
       print(s$name)
+      
+      df_cumrets <- totalReturn(s$R)
+      colnames(df_cumrets) <- s$name
+      df_cumrets <- t(df_cumrets)
+      df_totalRets <- rbind(df_totalRets,df_cumrets)
       
       df_returns <- table.AnnualizedReturns(s$R,Rf = RF)
       colnames(df_returns) <- s$name
@@ -309,6 +334,7 @@ get.strats.KPIs <- function(strategies_list,name_pattern,RF, year_file,folder_na
     
   }
   
+  df_totalRets <- t(df_totalRets) 
   
   df_returns_all <-t(df_returns_all) 
   
@@ -326,7 +352,7 @@ get.strats.KPIs <- function(strategies_list,name_pattern,RF, year_file,folder_na
   
   
   if(export){
-    
+    df_totalRets %>%  write.csv(file  = paste(folder_name,'/TotalReturn',year_file,".csv",sep=''),row.names = TRUE)
     df_dist_all %>% write.csv(file  = paste(folder_name,'/Distributions',year_file,".csv",sep=''),row.names = TRUE)
     df_returns_all %>% write.csv(file  = paste(folder_name,'/Returns',year_file,".csv",sep=''),row.names = TRUE)
     df_DR_all %>% write.csv(file  = paste(folder_name,'/DownsideRisk',year_file,".csv",sep=''),row.names = TRUE)
@@ -339,18 +365,12 @@ get.strats.KPIs <- function(strategies_list,name_pattern,RF, year_file,folder_na
   
   
   
-  return(list(df_returns_all,df_dist_all,df_DR_all,df_DR_ratio_all,df_DD_all,df_DD_ratio_all,modig_all))
+  return(list(df_totalRets,df_returns_all,df_dist_all,df_DR_all,df_DR_ratio_all,df_DD_all,df_DD_ratio_all,modig_all))
   
 }
 
-totalReturn <- function(R){
-  cumRets <- cumprod(1 + R) - 1
-  TotalRets <- cumRets %>%  coredata() %>%  tail(1)
-  rownames(TotalRets) <- c("Total Return")
-  #TotalRets <- TotalRets * 100 # Percentage
-  return(TotalRets)
-  
-}
+
+
 
 meanReturns <- function(R){
   u  <- colMeans(R) %>% as.data.frame() %>%  t()
@@ -488,19 +508,24 @@ cumrets_to_longer <- function(returns_gatthered,create_group = TRUE){
 
 # Data Visualization ----------------------------------------------------------------
 
-plot_compared_performance <- function(df_long_rets,title_plot,color_colum=group_strat){
-  df_long_rets %>%  ggplot(aes(x=Date,y=return)) +
-    geom_line(aes(color = {{color_colum}}), size = 1) +
-    labs(x="Date",y='Cummulative Returns',title = title_plot)+
-    theme_classic()
-  
-}
-
 export_plots <- function(plot_image,file_path){
   png(file_name)
   plot_image
   dev.off()
 }
+
+
+plot_compared_performance <- function(df_long_rets,title_plot,color_colum=group_strat){
+  #file_plt = paste("Results/Comparative_plots/",title_plot,".png",sep='')
+  
+  plt <- df_long_rets %>%  ggplot(aes(x=Date,y=return)) +
+    geom_line(aes(color = {{color_colum}}), size = 1) +
+    labs(x="Date",y='Cummulative Returns',title = title_plot)+
+    theme_classic()
+  plt
+  
+}
+
 
 
 

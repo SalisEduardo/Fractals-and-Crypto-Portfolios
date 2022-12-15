@@ -114,7 +114,9 @@ get.strats.KPIs(list(third_EW),name_pattern='EW',RF = 0,year_file = '2022',folde
 EW_index_daily_returns <-  rbind(first_EW$R,second_EW$R,third_EW$R) %>% fortify.zoo %>% as.tibble() %>%  dplyr::rename("Date" = Index,"EW" = portfolio.returns )
 EW_index_cumrets <- EW_index_daily_returns %>%  calc_cumrets()
 
-# Comparison --------------------------------------------------------------
+
+
+# Comparison ------------------------------------------------------------------
 
 indexes_rets <- list(EW_index_daily_returns,InvInef_index_daily_returns) %>% reduce(full_join,by='Date')
 
@@ -123,5 +125,10 @@ index_longDF_cumrets <- indexes_rets %>% cumrets_to_longer(create_group = FALSE)
 
 
 index_plot <- plot_compared_performance(index_longDF_cumrets,"Cryptocurrencies Index Performances",color_colum=Strat)
+
+
+indexes_rets %>% write.csv("Results/Crypto_Indexes/Series/index_daily.csv")
+index_cumrets %>% write.csv("Results/Crypto_Indexes/Series/index_cumulative.csv")
+
 
 
