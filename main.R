@@ -17,7 +17,8 @@ library(corrplot)
 library(GGally)
 library(RColorBrewer)
 
-source("functions.R")
+source("functions.R") # set of functions
+source("risk_free.R") # obtaining risk free data
 
 
 # Data ------------------------------------
@@ -480,9 +481,9 @@ strategies_4assets <- list(first_MVP_top4,
 
 
 
-results2020_4assets <- get.strats.KPIs(strategies_4assets,name_pattern='first',RF = 0,year_file = '2020',folder_name='Results/KPIs/4assets/',export = TRUE)
-results2021_4assets <- get.strats.KPIs(strategies_4assets,name_pattern='second',RF = 0,year_file = '2021',folder_name='Results/KPIs/4assets/',export = TRUE)
-results2022_4assets <- get.strats.KPIs(strategies_4assets,name_pattern='third',RF = 0,year_file = '2022',folder_name='Results/KPIs/4assets/',export = TRUE)
+results2020_4assets <- get.strats.KPIs(strategies_4assets,name_pattern='first',RF = t10_daily_2020,year_file = '2020',folder_name='Results/KPIs/4assets/',export = TRUE)
+results2021_4assets <- get.strats.KPIs(strategies_4assets,name_pattern='second',RF = t10_daily_2021,year_file = '2021',folder_name='Results/KPIs/4assets/',export = TRUE)
+results2022_4assets <- get.strats.KPIs(strategies_4assets,name_pattern='third',RF = t10_daily_2022,year_file = '2022',folder_name='Results/KPIs/4assets/',export = TRUE)
 
 
 
@@ -796,9 +797,9 @@ strategies_8assets <- list(first_MVP_top8,
 
 
 
-results2020_8assets <- get.strats.KPIs(strategies_8assets,name_pattern='first',RF = 0,year_file = '2020',folder_name='Results/KPIs/8assets/',export = TRUE)
-results2021_8assets <- get.strats.KPIs(strategies_8assets,name_pattern='second',RF = 0,year_file = '2021',folder_name='Results/KPIs/8assets/',export = TRUE)
-results2022_8assets <- get.strats.KPIs(strategies_8assets,name_pattern='third',RF = 0,year_file = '2022',folder_name='Results/KPIs/8assets/',export = TRUE)
+results2020_8assets <- get.strats.KPIs(strategies_8assets,name_pattern='first',RF = t10_daily_2020,year_file = '2020',folder_name='Results/KPIs/8assets/',export = TRUE)
+results2021_8assets <- get.strats.KPIs(strategies_8assets,name_pattern='second',RF = t10_daily_2021,year_file = '2021',folder_name='Results/KPIs/8assets/',export = TRUE)
+results2022_8assets <- get.strats.KPIs(strategies_8assets,name_pattern='third',RF = t10_daily_2022,year_file = '2022',folder_name='Results/KPIs/8assets/',export = TRUE)
 
 
 

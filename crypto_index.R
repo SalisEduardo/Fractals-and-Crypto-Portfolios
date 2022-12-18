@@ -62,9 +62,9 @@ InvInef_index_cumrets <- InvInef_index_daily_returns %>%  calc_cumrets()
 
 ## KPIs
 
-get.strats.KPIs(list(first_InvInef_all),name_pattern='InvInef',RF = 0,year_file = '2020',folder_name='Results/Crypto_Indexes/KPIs/InvInef/',export = TRUE)
-get.strats.KPIs(list(second_InvInef_all),name_pattern='InvInef',RF = 0,year_file = '2021',folder_name='Results/Crypto_Indexes/KPIs/InvInef/',export = TRUE)
-get.strats.KPIs(list(third_InvInef_all),name_pattern='InvInef',RF = 0,year_file = '2022',folder_name='Results/Crypto_Indexes/KPIs/InvInef/',export = TRUE)
+get.strats.KPIs(list(first_InvInef_all),name_pattern='InvInef',RF = t10_daily_2020,year_file = '2020',folder_name='Results/Crypto_Indexes/KPIs/InvInef/',export = TRUE)
+get.strats.KPIs(list(second_InvInef_all),name_pattern='InvInef',RF = t10_daily_2021,year_file = '2021',folder_name='Results/Crypto_Indexes/KPIs/InvInef/',export = TRUE)
+get.strats.KPIs(list(third_InvInef_all),name_pattern='InvInef',RF = t10_daily_2022,year_file = '2022',folder_name='Results/Crypto_Indexes/KPIs/InvInef/',export = TRUE)
 
 
 
@@ -105,9 +105,9 @@ equal_weights %>%  write.csv("Results/Crypto_Indexes/Weights/EqualWeights.csv")
 
 # KPIs
 
-get.strats.KPIs(list(first_EW),name_pattern='EW',RF = 0,year_file = '2020',folder_name='Results/Crypto_Indexes/KPIs/EW/',export = TRUE)
-get.strats.KPIs(list(second_EW),name_pattern='EW',RF = 0,year_file = '2021',folder_name='Results/Crypto_Indexes/KPIs/EW/',export = TRUE)
-get.strats.KPIs(list(third_EW),name_pattern='EW',RF = 0,year_file = '2022',folder_name='Results/Crypto_Indexes/KPIs/EW/',export = TRUE)
+get.strats.KPIs(list(first_EW),name_pattern='EW',RF = t10_daily_2020,year_file = '2020',folder_name='Results/Crypto_Indexes/KPIs/EW/',export = TRUE)
+get.strats.KPIs(list(second_EW),name_pattern='EW',RF = t10_daily_2021,year_file = '2021',folder_name='Results/Crypto_Indexes/KPIs/EW/',export = TRUE)
+get.strats.KPIs(list(third_EW),name_pattern='EW',RF = t10_daily_2022,year_file = '2022',folder_name='Results/Crypto_Indexes/KPIs/EW/',export = TRUE)
 
 
 # Series

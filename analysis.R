@@ -1,6 +1,7 @@
 source("main.R")
 source("functions.R")
 
+
 # Build report tables
 
 all_strategies <- c(strategies_4assets,strategies_8assets)

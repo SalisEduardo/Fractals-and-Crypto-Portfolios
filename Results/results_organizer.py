@@ -119,7 +119,7 @@ with pd.ExcelWriter("ConjuntoKPIs.xlsx") as writer:
             df = pd.concat([dfi,dfj])
             df.to_excel(writer,sheet_name=i.replace(".csv",""))
 
-    for i,j in zip(csv_files_2021_4c,csv_files_2020_8c):
+    for i,j in zip(csv_files_2021_4c,csv_files_2021_8c):
             if not("Drawdowns2021" in i): 
 
                 file_path_i = "Results/KPIs/4assets/" + i
