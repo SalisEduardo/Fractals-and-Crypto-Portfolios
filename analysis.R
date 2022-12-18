@@ -31,20 +31,20 @@ cumrets_2022 %>%  write.csv("Results/Series_returns/cumulative_returns_2022.csv"
 
 series_4cryptos_2020 <- gatther_Rets(strategies_4assets,name_pattern = 'first') 
 cumrets_4cryptos_2020 <- cumrets_to_longer(series_4cryptos_2020)
-plot_cumrets_4cryptos_2020 <- plot_compared_performance(cumrets_4cryptos_2020,"Strategies Perfromance",color_colum = Strat)
-agg_cumrets_4cryptos_2020<- plot_compared_performance(cumrets_4cryptos_2020,"Strategies Perfromance")
+plot_cumrets_4cryptos_2020 <- plot_compared_performance(cumrets_4cryptos_2020,"Strategies Perfromance 4 cryptos",color_colum = Strat)
+agg_cumrets_4cryptos_2020<- plot_compared_performance(cumrets_4cryptos_2020,"Strategies Perfromance 4 cryptos Grouped")
 
 
 series_4cryptos_2021 <- gatther_Rets(strategies_4assets,name_pattern = 'second') 
 cumrets_4cryptos_2021 <- cumrets_to_longer(series_4cryptos_2021)
-plot_cumrets_4cryptos_2021 <- plot_compared_performance(cumrets_4cryptos_2021,"Strategies Perfromance",color_colum = Strat)
-agg_cumrets_4cryptos_2021<- plot_compared_performance(cumrets_4cryptos_2021,"Strategies Perfromance")
+plot_cumrets_4cryptos_2021 <- plot_compared_performance(cumrets_4cryptos_2021,"Strategies Perfromance 4 cryptos",color_colum = Strat)
+agg_cumrets_4cryptos_2021<- plot_compared_performance(cumrets_4cryptos_2021,"Strategies Perfromance 4 cryptos Grouped")
 
 
 series_4cryptos_2022 <- gatther_Rets(strategies_4assets,name_pattern = 'third') 
 cumrets_4cryptos_2022 <- cumrets_to_longer(series_4cryptos_2022)
-plot_cumrets_4cryptos_2022 <- plot_compared_performance(cumrets_4cryptos_2022,"Strategies Perfromance",color_colum = Strat)
-agg_cumrets_4cryptos_2022<- plot_compared_performance(cumrets_4cryptos_2022,"Strategies Perfromance")
+plot_cumrets_4cryptos_2022 <- plot_compared_performance(cumrets_4cryptos_2022,"Strategies Perfromance 4 cryptos",color_colum = Strat)
+agg_cumrets_4cryptos_2022<- plot_compared_performance(cumrets_4cryptos_2022,"Strategies Perfromance 4 cryptos Grouped")
 
 
 
@@ -124,20 +124,20 @@ invInef_4cryptos_2022_plot
 
 series_8cryptos_2020 <- gatther_Rets(strategies_8assets,name_pattern = 'first') 
 cumrets_8cryptos_2020 <- cumrets_to_longer(series_8cryptos_2020)
-plot_cumrets_8cryptos_2020 <- plot_compared_performance(cumrets_8cryptos_2020,"Strategies Perfromance",color_colum = Strat)
-agg_cumrets_8cryptos_2020<- plot_compared_performance(cumrets_8cryptos_2020,"Strategies Perfromance")
+plot_cumrets_8cryptos_2020 <- plot_compared_performance(cumrets_8cryptos_2020,"Strategies Perfromance 8 cryptos",color_colum = Strat)
+agg_cumrets_8cryptos_2020<- plot_compared_performance(cumrets_8cryptos_2020,"Strategies Perfromance 8 cryptos Grouped")
 
 
 series_8cryptos_2021 <- gatther_Rets(strategies_8assets,name_pattern = 'second') 
 cumrets_8cryptos_2021 <- cumrets_to_longer(series_8cryptos_2021)
-plot_cumrets_8cryptos_2021 <- plot_compared_performance(cumrets_8cryptos_2021,"Strategies Perfromance",color_colum = Strat)
-agg_cumrets_8cryptos_2021<- plot_compared_performance(cumrets_8cryptos_2021,"Strategies Perfromance")
+plot_cumrets_8cryptos_2021 <- plot_compared_performance(cumrets_8cryptos_2021,"Strategies Perfromance 8 cryptos",color_colum = Strat)
+agg_cumrets_8cryptos_2021<- plot_compared_performance(cumrets_8cryptos_2021,"Strategies Perfromance 8 cryptos Grouped")
 
 
 series_8cryptos_2022 <- gatther_Rets(strategies_8assets,name_pattern = 'third') 
 cumrets_8cryptos_2022 <- cumrets_to_longer(series_8cryptos_2022)
-plot_cumrets_8cryptos_2022 <- plot_compared_performance(cumrets_8cryptos_2022,"Strategies Perfromance",color_colum = Strat)
-agg_cumrets_8cryptos_2022<- plot_compared_performance(cumrets_8cryptos_2022,"Strategies Perfromance")
+plot_cumrets_8cryptos_2022 <- plot_compared_performance(cumrets_8cryptos_2022,"Strategies Perfromance 8 cryptos",color_colum = Strat)
+agg_cumrets_8cryptos_2022<- plot_compared_performance(cumrets_8cryptos_2022,"Strategies Perfromance 8 cryptos Grouped ")
 
 
 
@@ -229,13 +229,13 @@ series_2020 <- gatther_Rets(all_strategies,name_pattern = 'first')
 cumrets_2020 <- cumrets_to_longer(series_2020)
 cumrets_2020$port_size <- ifelse(grepl("4",cumrets_2020$Strat),'4crypto','8crypto')
 
-plot_cumrets_2020 <- plot_compared_performance(cumrets_2020,"Strategies Perfromance",color_colum = Strat)
+plot_cumrets_2020 <- plot_compared_performance(cumrets_2020,"Strategies Perfromance 4 x 8 cryptos",color_colum = Strat)
 
 series_2021 <- gatther_Rets(all_strategies,name_pattern = 'second') 
 cumrets_2021 <- cumrets_to_longer(series_2021)
 cumrets_2021$port_size <- ifelse(grepl("4",cumrets_2021$Strat),'4crypto','8crypto')
 
-plot_cumrets_2021 <- plot_compared_performance(cumrets_2021,"Strategies Perfromance",color_colum = Strat)
+plot_cumrets_2021 <- plot_compared_performance(cumrets_2021,"Strategies Perfromance 4 x 8 cryptos",color_colum = Strat)
 #size_agg_cumrets_2020 <- plot_compared_performance(cumrets_2020,"Strategies Perfromance",color_colum = port_size)
 
 
@@ -243,7 +243,7 @@ series_2022 <- gatther_Rets(all_strategies,name_pattern = 'third')
 cumrets_2022 <- cumrets_to_longer(series_2022)
 cumrets_2022$port_size <- ifelse(grepl("4",cumrets_2022$Strat),'4crypto','8crypto')
 
-plot_cumrets_2022 <- plot_compared_performance(cumrets_2022,"Strategies Perfromance",color_colum = Strat)
+plot_cumrets_2022 <- plot_compared_performance(cumrets_2022,"Strategies Perfromance 4 x 8 cryptos",color_colum = Strat)
 #size_agg_cumrets_2020 <- plot_compared_performance(cumrets_2020,"Strategies Perfromance",color_colum = port_size)
 
 
@@ -260,9 +260,7 @@ mvp_TOP_2020_plot <- all_strategies %>%
   mutate(port_size=ifelse(grepl("4",Strat),'4crypto','8crypto')) %>%  
   plot_compared_performance(title_plot = 'Mininimum Variance  Top 4 x Top 8',color_colum=port_size) 
 
-png("Results/Comparative_Plots/mvp_TOP_2020_plot.png")
 mvp_TOP_2020_plot
-dev.off()
 
 
 
@@ -274,9 +272,7 @@ maxSR_TOP_2020_plot <- all_strategies %>%
   plot_compared_performance(title_plot = 'Maximum Sharpe Top 4 x Top 8',color_colum=port_size) 
 
 
-png("Results/Comparative_Plots/maxSR_TOP_2020_plot.png")
 maxSR_TOP_2020_plot
-dev.off()
 
 
 
@@ -286,9 +282,8 @@ EW_TOP_2020_plot <- all_strategies %>%
   mutate(port_size=ifelse(grepl("4",Strat),'4crypto','8crypto')) %>%  
   plot_compared_performance(title_plot = 'Equal Weighted Top 4 x Top 8',color_colum=port_size) 
 
-png("Results/Comparative_Plots/EW_TOP_2020_plot.png")
 EW_TOP_2020_plot
-dev.off()
+
 
 
 
@@ -300,9 +295,9 @@ InvInef_TOP_2020_plot <- all_strategies %>%
   mutate(port_size=ifelse(grepl("4",Strat),'4crypto','8crypto')) %>%  
   plot_compared_performance(title_plot = 'Inverse Inefficiency Top 4 x Top 8',color_colum=port_size) 
 
-png("Results/Comparative_Plots/InvInef_TOP_2020_plot.png")
+
 InvInef_TOP_2020_plot
-dev.off()
+
 
 
 #### 2021
@@ -313,9 +308,9 @@ mvp_TOP_2021_plot <- all_strategies %>%
   mutate(port_size=ifelse(grepl("4",Strat),'4crypto','8crypto')) %>%  
   plot_compared_performance(title_plot = 'Mininimum Variance  Top 4 x Top 8',color_colum=port_size) 
 
-png("Results/Comparative_Plots/mvp_TOP_2021_plot.png")
+
 mvp_TOP_2021_plot
-dev.off()
+
 
 maxSR_TOP_2021_plot <- all_strategies %>% 
   gatther_Rets(name_pattern = 'second_maxSR_top') %>%   
@@ -323,9 +318,9 @@ maxSR_TOP_2021_plot <- all_strategies %>%
   mutate(port_size=ifelse(grepl("4",Strat),'4crypto','8crypto')) %>%  
   plot_compared_performance(title_plot = 'Maximum Sharpe Top 4 x Top 8',color_colum=port_size) 
 
-png("Results/Comparative_Plots/maxSR_TOP_2021_plot.png")
+
 maxSR_TOP_2021_plot
-dev.off()
+
 
 
 
@@ -335,9 +330,8 @@ EW_TOP_2021_plot <- all_strategies %>%
   mutate(port_size=ifelse(grepl("4",Strat),'4crypto','8crypto')) %>%  
   plot_compared_performance(title_plot = 'Equal Weighted Top 4 x Top 8',color_colum=port_size) 
 
-png("Results/Comparative_Plots/EW_TOP_2021_plot.png")
 EW_TOP_2021_plot
-dev.off()
+
 
 
 
@@ -349,9 +343,7 @@ InvInef_TOP_2021_plot <- all_strategies %>%
 
 
 
-png("Results/Comparative_Plots/InvInef_TOP_2021_plot.png")
 InvInef_TOP_2021_plot
-dev.off()
 
 #### 2022
 
@@ -362,9 +354,7 @@ mvp_TOP_2022_plot <- all_strategies %>%
   plot_compared_performance(title_plot = 'Mininimum Variance  Top 4 x Top 8',color_colum=port_size) 
 mvp_TOP_2022_plot
 
-png("Results/Comparative_Plots/mvp_TOP_2022_plot.png")
 mvp_TOP_2022_plot
-dev.off()
 
 
 
@@ -374,9 +364,7 @@ maxSR_TOP_2022_plot <- all_strategies %>%
   mutate(port_size=ifelse(grepl("4",Strat),'4crypto','8crypto')) %>%  
   plot_compared_performance(title_plot = 'Maximum Sharpe Top 4 x Top 8',color_colum=port_size) 
 
-png("Results/Comparative_Plots/maxSR_TOP_2022_plot.png")
 maxSR_TOP_2022_plot
-dev.off()
 
 
 
@@ -386,9 +374,7 @@ EW_TOP_2022_plot <- all_strategies %>%
   mutate(port_size=ifelse(grepl("4",Strat),'4crypto','8crypto')) %>%  
   plot_compared_performance(title_plot = 'Equal Weighted Top 4 x Top 8',color_colum=port_size) 
 
-png("Results/Comparative_Plots/EW_TOP_2022_plot.png")
 EW_TOP_2022_plot
-dev.off()
 
 
 
@@ -400,9 +386,7 @@ InvInef_TOP_2022_plot <- all_strategies %>%
 
 
 
-png("Results/Comparative_Plots/InvInef_TOP_2022_plot.png")
 InvInef_TOP_2022_plot
-dev.off()
 
 
 
@@ -416,9 +400,7 @@ mvp_BOTTOM_2020_plot <- all_strategies %>%
   mutate(port_size=ifelse(grepl("4",Strat),'4crypto','8crypto')) %>%  
   plot_compared_performance(title_plot = 'Mininimum Variance  Bottom 4 x Bottom 8',color_colum=port_size) 
 
-png("Results/Comparative_Plots/mvp_BOTTOM_2020_plot.png")
 mvp_BOTTOM_2020_plot
-dev.off()
 
 
 maxSR_BOTTOM_2020_plot <- all_strategies %>% 
@@ -428,9 +410,8 @@ maxSR_BOTTOM_2020_plot <- all_strategies %>%
   plot_compared_performance(title_plot = 'Maximum Sharpe Bottom 4 x Bottom 8',color_colum=port_size) 
 
 
-png("Results/Comparative_Plots/maxSR_BOTTOM_2020_plot.png")
 maxSR_BOTTOM_2020_plot
-dev.off()
+
 
 
 
@@ -441,9 +422,7 @@ EW_BOTTOM_2020_plot <- all_strategies %>%
   mutate(port_size=ifelse(grepl("4",Strat),'4crypto','8crypto')) %>%  
   plot_compared_performance(title_plot = 'Equal Weighted Bottom 4 x Bottom 8',color_colum=port_size) 
 
-png("Results/Comparative_Plots/EW_BOTTOM_2020_plot.png")
 EW_BOTTOM_2020_plot
-dev.off()
 
 
 
@@ -454,9 +433,7 @@ InvInef_BOTTOM_2020_plot <- all_strategies %>%
   mutate(port_size=ifelse(grepl("4",Strat),'4crypto','8crypto')) %>%  
   plot_compared_performance(title_plot = 'Inverse Inefficiency Bottom 4 x Bottom 8',color_colum=port_size) 
 
-png("Results/Comparative_Plots/InvInef_BOTTOM_2020_plot.png")
 InvInef_BOTTOM_2020_plot
-dev.off()
 
 
 #### 2021
@@ -468,9 +445,7 @@ mvp_BOTTOM_2021_plot <- all_strategies %>%
   plot_compared_performance(title_plot = 'Mininimum Variance  Bottom 4 x Bottom 8',color_colum=port_size) 
 
 
-png("Results/Comparative_Plots/mvp_BOTTOM_2021_plot.png")
 mvp_BOTTOM_2021_plot
-dev.off()
 
 
 
@@ -480,9 +455,8 @@ maxSR_BOTTOM_2021_plot <- all_strategies %>%
   mutate(port_size=ifelse(grepl("4",Strat),'4crypto','8crypto')) %>%  
   plot_compared_performance(title_plot = 'Maximum Sharpe Bottom 4 x Bottom 8',color_colum=port_size) 
 
-png("Results/Comparative_Plots/maxSR_BOTTOM_2021_plot.png")
 maxSR_BOTTOM_2021_plot
-dev.off()
+
 
 
 EW_BOTTOM_2021_plot <- all_strategies %>% 
@@ -491,9 +465,7 @@ EW_BOTTOM_2021_plot <- all_strategies %>%
   mutate(port_size=ifelse(grepl("4",Strat),'4crypto','8crypto')) %>%  
   plot_compared_performance(title_plot = 'Equal Weighted Bottom 4 x Bottom 8',color_colum=port_size) 
 
-png("Results/Comparative_Plots/EW_BOTTOM_2021_plot.png")
 EW_BOTTOM_2021_plot
-dev.off()
 
 
 
@@ -504,9 +476,7 @@ InvInef_BOTTOM_2021_plot <- all_strategies %>%
   plot_compared_performance(title_plot = 'Inverse Inefficiency Bottom 4 x Bottom 8',color_colum=port_size) 
 
 
-png("Results/Comparative_Plots/InvInef_BOTTOM_2021_plot.png")
 InvInef_BOTTOM_2021_plot
-dev.off()
 
 
 
@@ -521,9 +491,7 @@ mvp_BOTTOM_2022_plot <- all_strategies %>%
 
 
 
-png("Results/Comparative_Plots/mvp_BOTTOM_2022_plot.png")
 mvp_BOTTOM_2022_plot
-dev.off()
 
 
 maxSR_BOTTOM_2022_plot <- all_strategies %>% 
@@ -532,9 +500,7 @@ maxSR_BOTTOM_2022_plot <- all_strategies %>%
   mutate(port_size=ifelse(grepl("4",Strat),'4crypto','8crypto')) %>%  
   plot_compared_performance(title_plot = 'Maximum Sharpe Bottom 4 x Bottom 8',color_colum=port_size) 
 
-png("Results/Comparative_Plots/maxSR_BOTTOM_2022_plot.png")
 maxSR_BOTTOM_2022_plot
-dev.off()
 
 
 EW_BOTTOM_2022_plot <- all_strategies %>% 
@@ -543,9 +509,8 @@ EW_BOTTOM_2022_plot <- all_strategies %>%
   mutate(port_size=ifelse(grepl("4",Strat),'4crypto','8crypto')) %>%  
   plot_compared_performance(title_plot = 'Equal Weighted Bottom 4 x Bottom 8',color_colum=port_size) 
 
-png("Results/Comparative_Plots/EW_BOTTOM_2022_plot.png")
 EW_BOTTOM_2022_plot
-dev.off()
+
 
 
 InvInef_BOTTOM_2022_plot <- all_strategies %>% 
@@ -555,9 +520,7 @@ InvInef_BOTTOM_2022_plot <- all_strategies %>%
   plot_compared_performance(title_plot = 'Inverse Inefficiency Bottom 4 x Bottom 8',color_colum=port_size) 
 
 
-png("Results/Comparative_Plots/InvInef_BOTTOM_2022_plot.png")
 InvInef_BOTTOM_2022_plot
-dev.off()
 
 
 

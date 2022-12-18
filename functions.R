@@ -515,13 +515,24 @@ export_plots <- function(plot_image,file_path){
 }
 
 
-plot_compared_performance <- function(df_long_rets,title_plot,color_colum=group_strat){
-  #file_plt = paste("Results/Comparative_plots/",title_plot,".png",sep='')
+plot_compared_performance <- function(df_long_rets,title_plot,color_colum=group_strat,folder_path="Results/Comparative_Plots/"){
+  
+  min_year = df_long_rets$Date %>%  min() %>% format(format="%Y") %>%  as.character()
+  max_year = df_long_rets$Date %>%  max() %>% format(format="%Y") %>%  as.character()
+  
+  if(min_year != max_year){
+    file_plt = paste(folder_path,title_plot," ",min_year,"-",max_year,".png",sep='')
+  }else{
+    file_plt = paste(folder_path,title_plot,min_year,".png",sep='')
+  }
+  
   
   plt <- df_long_rets %>%  ggplot(aes(x=Date,y=return)) +
     geom_line(aes(color = {{color_colum}}), size = 1) +
     labs(x="Date",y='Cummulative Returns',title = title_plot)+
     theme_classic()
+  ggsave(file_plt,plt)
+  
   plt
   
 }
