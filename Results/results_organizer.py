@@ -44,14 +44,22 @@ with pd.ExcelWriter("Weights.xlsx") as writer:
         file_path = "Results/Weights/4assets/" + i
         df = pd.read_csv(file_path,index_col=[0])
         df = change_column_names(df)
-        name_sheet = re.search('%s(.*)%s' % ("_", ".csv"), i).group(1)
+        #name_sheet = re.search('%s(.*)%s' % ("_", ".csv"), i).group(1)
+        name_sheet = i.replace(".csv","")
+        name_sheet = name_sheet.replace("first","2020")
+        name_sheet = name_sheet.replace("second","2021")
+        name_sheet = name_sheet.replace("third","2022")
         df.to_excel(writer,sheet_name=name_sheet)
 
     for i in files_weights_portfolio8:
         file_path = "Results/Weights/8assets/" + i
         df = pd.read_csv(file_path,index_col=[0])
         df = change_column_names(df)
-        name_sheet = re.search('%s(.*)%s' % ("_", ".csv"), i).group(1)
+        #name_sheet = re.search('%s(.*)%s' % ("_", ".csv"), i).group(1)
+        name_sheet = i.replace(".csv","")
+        name_sheet = name_sheet.replace("first","2020")
+        name_sheet = name_sheet.replace("second","2021")
+        name_sheet = name_sheet.replace("third","2022")
         df.to_excel(writer,sheet_name=name_sheet)
     
     for i in files_weights_index:
