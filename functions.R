@@ -276,96 +276,82 @@ totalReturn_v2 <- function(R){
 }
 
 
-get.strats.KPIs <- function(strategies_list,name_pattern,RF, year_file,folder_name='KPIs',mar= 0,prob=0.95,export=FALSE){
-  df_totalRets <- data.frame()
-  df_returns_all <- data.frame()
-  df_dist_all <- data.frame()
-  df_DR_all <- data.frame()
-  df_DR_ratio_all <- data.frame()
+
+preprocess_kpi_table <- function(kpi_table,strategy_name,test_period,KPI_family){
+  kpi_table  <- kpi_table %>%  as.data.frame()
+  colnames(kpi_table) <- "value"
+  kpi_table$variable <- rownames(kpi_table)
+  rownames(kpi_table) <-  NULL
+  kpi_table$Strategy_name <- strategy_name
+  kpi_table$Test_period <- test_period
+  kpi_table$KPI <- KPI_family
+  return(kpi_table[,c("Strategy_name","Test_period","value","variable","KPI")])
+}
+  
+
+get.strats.KPIs <- function(strategies_list,name_pattern,year_file,RF=0,folder_name='KPIs',mar= 0,prob=0.95,export=FALSE){
+  df_KPIS <- data.frame()
   df_DD_all <- data.frame()
-  df_DD_ratio_all <- data.frame()
-  modig_all <- data.frame()
   
   for (s in strategies_list){
     if(grepl(name_pattern,s$name)){
       print(s$name)
       
-      df_cumrets <- totalReturn(s$R)
-      colnames(df_cumrets) <- s$name
-      df_cumrets <- t(df_cumrets)
-      df_totalRets <- rbind(df_totalRets,df_cumrets)
+      df_cumrets <- totalReturn(s$R)  %>%  preprocess_kpi_table(strategy_name = s$name,
+                                                                test_period = s$test,
+                                                                KPI_family = "TotalReturn")
+      df_KPIS <- rbind(df_KPIS,df_cumrets)
       
-      df_returns <- table.AnnualizedReturns(s$R,Rf = RF)
-      colnames(df_returns) <- s$name
-      df_returns <- t(df_returns)
-      df_returns_all <- rbind(df_returns_all,df_returns)
       
-      df_dist <- table.Distributions(s$R)
-      colnames(df_dist) <- s$name
-      df_dist <- t(df_dist)
-      df_dist_all <- rbind(df_dist_all,df_dist)
+      df_returns <- table.AnnualizedReturns(s$R,Rf = RF) %>% preprocess_kpi_table(strategy_name = s$name,
+                                                                                  test_period = s$test,
+                                                                                  KPI_family = "AnnualizedReturns")
       
-      df_DR <- table.DownsideRisk(s$R,MAR = 0, p=0.95)
-      colnames(df_DR) <- s$name
-      df_DR <- t(df_DR)
-      df_DR_all <- rbind(df_DR_all,df_DR)
+      df_KPIS <- rbind(df_KPIS,df_returns)
       
-      df_DR_ratio <- table.DownsideRiskRatio(s$R,MAR = 0)
-      colnames(df_DR_ratio) <- s$name
-      df_DR_ratio <- t(df_DR_ratio)
-      df_DR_ratio_all <- rbind(df_DR_ratio_all,df_DR_ratio)
+      
+      df_dist <- table.Distributions(s$R) %>% preprocess_kpi_table(strategy_name = s$name,
+                                                                   test_period = s$test,
+                                                                   KPI_family = "Distributions")
+      
+      df_KPIS <- rbind(df_KPIS,df_dist)
+      
+      
+      df_DR <- table.DownsideRisk(s$R,MAR = 0, p=0.95) %>% preprocess_kpi_table(strategy_name = s$name,
+                                                                                test_period = s$test,
+                                                                                KPI_family = "DownsideRisk")
+      
+      df_KPIS <- rbind(df_KPIS,df_DR)
+      
+      
+      df_DR_ratio <- table.DownsideRiskRatio(s$R,MAR = 0) %>% preprocess_kpi_table(strategy_name = s$name,
+                                                                                   test_period = s$test,
+                                                                                   KPI_family = "DownsideRiskRatio")
+      
+      df_KPIS <- rbind(df_KPIS,df_DR_ratio)
+      
+      
       
       df_DD <- table.Drawdowns(s$R)
-      #colnames(df_DD) <- s$name
       df_DD$strategy <- s$name
-      #df_DD <- t(df_DD)
+      df_DD$Test_period <- s$s$test
       df_DD_all <- rbind(df_DD_all,df_DD)
       
-      df_DD_ratio <- table.DrawdownsRatio(s$R)
-      colnames(df_DD_ratio) <- s$name
-      df_DD_ratio <- t(df_DD_ratio)
-      df_DD_ratio_all <- rbind(df_DD_ratio_all,df_DD_ratio)
       
-      # df_modig <- table.modigliani(s$R,period = s$test,riskfree = RF)
-      # colnames(df_modig) <- s$name
-      # df_modig <- t(df_modig)
-      # modig_all <- rbind(modig_all,df_modig) 
-    }
+      }
     
   }
   
-  df_totalRets <- t(df_totalRets) 
-  
-  df_returns_all <-t(df_returns_all) 
-  
-  df_dist_all <- t(df_dist_all) 
-  
-  df_DR_all <- t(df_DR_all) 
-  
-  df_DR_ratio_all <- t(df_DR_ratio_all) 
-  
-  #df_DD_all <- t(df_DD_all)
-  
-  df_DD_ratio_all <- t(df_DD_ratio_all) 
-  
-  #modig_all <- t(modig_all)
   
   
   if(export){
-    df_totalRets %>%  write.csv(file  = paste(folder_name,'/TotalReturn',year_file,".csv",sep=''),row.names = TRUE)
-    df_dist_all %>% write.csv(file  = paste(folder_name,'/Distributions',year_file,".csv",sep=''),row.names = TRUE)
-    df_returns_all %>% write.csv(file  = paste(folder_name,'/Returns',year_file,".csv",sep=''),row.names = TRUE)
-    df_DR_all %>% write.csv(file  = paste(folder_name,'/DownsideRisk',year_file,".csv",sep=''),row.names = TRUE)
-    df_DR_ratio_all %>% write.csv(file  = paste(folder_name,'/DownsideRiskRatio',year_file,".csv",sep=''),row.names = TRUE)
-    df_DR_ratio_all %>% write.csv(file  = paste(folder_name,'/DrawdownsRatio',year_file,".csv",sep=''),row.names = TRUE)
-    modig_all %>% write.csv(file  = paste(folder_name,'/Modigliani',year_file,".csv",sep=''),row.names = TRUE)
-    df_DD_all %>% write.csv(file  = paste(folder_name,'/Drawdowns',year_file,".csv",sep=''),row.names = TRUE)
+    df_KPIS %>%  write.csv(file  = paste(folder_name,'/KPIs_',year_file,'.csv',sep=''),row.names = FALSE)
+    df_DD_all %>% write.csv(file  = paste(folder_name,'/Drawdowns_',year_file,'.csv',sep=''),row.names = FALSE)
     
   }
   
   
-  
-  return(list(df_totalRets,df_returns_all,df_dist_all,df_DR_all,df_DR_ratio_all,df_DD_all,df_DD_ratio_all,modig_all))
+  return(list(df_KPIS,df_DD_all))
   
 }
 
