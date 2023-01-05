@@ -30,11 +30,25 @@ pspec.lo.full <- function(assets_names){
 }
 
 ## Box
-pspec.box.full <- function(assets_names, min_box=0,max_box=1){
-  p_spec <- portfolio.spec(assets = assets_names) %>% 
-    add.constraint(type = "full_investment") %>%
-    add.constraint(type = "box", min=min_box, max=max_box)
+pspec.box.full <- function(assets_names, min_box = 0.05,max_box = NULL){
+  if(is.null(max_box)==FALSE){
+    p_spec <- portfolio.spec(assets = assets_names) %>% 
+      add.constraint(type = "box", min=min_box, max=max_box) %>% 
+      add.constraint(type = "full_investment") 
+  }else{
+    n_assets = length(assets_names)
+    max_box =  1- ((n_assets - 1) * min_box)
+    p_spec <- portfolio.spec(assets = assets_names) %>% 
+      add.constraint(type = "box", min=min_box, max=max_box) %>% 
+      add.constraint(type = "full_investment") 
+
+  }
+  
+  return(p_spec)
 }
+
+
+
 
 
 # Allocation---------------------------------------------------------------------------------------------------
