@@ -30,7 +30,48 @@ pspec.lo.full <- function(assets_names){
 }
 
 ## Box
-pspec.box.full <- function(assets_names, min_box = 0.05,max_box = NULL){
+pspec.box.full <- function(assets_names, min_box ,max_box){
+  p_spec <- portfolio.spec(assets = assets_names) %>% 
+    add.constraint(type = "box", min=min_box, max=max_box) %>% 
+    add.constraint(type = "full_investment") 
+
+  
+  return(p_spec)
+}
+
+pspec.box.fullmax60 <- function(assets_names, min_box=0 ,max_box=0.6){
+  p_spec <- portfolio.spec(assets = assets_names) %>% 
+    add.constraint(type = "box", min=min_box, max=max_box) %>% 
+    add.constraint(type = "full_investment") 
+  
+  
+  return(p_spec)
+}
+
+
+pspec.box.fullmax50 <- function(assets_names, min_box=0 ,max_box=0.5){
+  p_spec <- portfolio.spec(assets = assets_names) %>% 
+    add.constraint(type = "box", min=min_box, max=max_box) %>% 
+    add.constraint(type = "full_investment") 
+  
+  
+  return(p_spec)
+}
+
+pspec.box.fullmax40 <- function(assets_names, min_box=0 ,max_box=0.4){
+  p_spec <- portfolio.spec(assets = assets_names) %>% 
+    add.constraint(type = "box", min=min_box, max=max_box) %>% 
+    add.constraint(type = "full_investment") 
+  
+  
+  return(p_spec)
+}
+
+
+
+
+
+pspec.box.full.1pct <- function(assets_names, min_box = 0.01,max_box = NULL){
   if(is.null(max_box)==FALSE){
     p_spec <- portfolio.spec(assets = assets_names) %>% 
       add.constraint(type = "box", min=min_box, max=max_box) %>% 
@@ -41,7 +82,61 @@ pspec.box.full <- function(assets_names, min_box = 0.05,max_box = NULL){
     p_spec <- portfolio.spec(assets = assets_names) %>% 
       add.constraint(type = "box", min=min_box, max=max_box) %>% 
       add.constraint(type = "full_investment") 
+    
+  }
+  
+  return(p_spec)
+}
 
+pspec.box.full.2pct <- function(assets_names, min_box = 0.02,max_box = NULL){
+  if(is.null(max_box)==FALSE){
+    p_spec <- portfolio.spec(assets = assets_names) %>% 
+      add.constraint(type = "box", min=min_box, max=max_box) %>% 
+      add.constraint(type = "full_investment") 
+  }else{
+    n_assets = length(assets_names)
+    max_box =  1- ((n_assets - 1) * min_box)
+    p_spec <- portfolio.spec(assets = assets_names) %>% 
+      add.constraint(type = "box", min=min_box, max=max_box) %>% 
+      add.constraint(type = "full_investment") 
+    
+  }
+  
+  return(p_spec)
+}
+
+
+
+
+pspec.box.full.5pct <- function(assets_names, min_box = 0.05,max_box = NULL){
+  if(is.null(max_box)==FALSE){
+    p_spec <- portfolio.spec(assets = assets_names) %>% 
+      add.constraint(type = "box", min=min_box, max=max_box) %>% 
+      add.constraint(type = "full_investment") 
+  }else{
+    n_assets = length(assets_names)
+    max_box =  1- ((n_assets - 1) * min_box)
+    p_spec <- portfolio.spec(assets = assets_names) %>% 
+      add.constraint(type = "box", min=min_box, max=max_box) %>% 
+      add.constraint(type = "full_investment") 
+    
+  }
+  
+  return(p_spec)
+}
+
+pspec.box.full.10pct <- function(assets_names, min_box = 0.1,max_box = NULL){
+  if(is.null(max_box)==FALSE){
+    p_spec <- portfolio.spec(assets = assets_names) %>% 
+      add.constraint(type = "box", min=min_box, max=max_box) %>% 
+      add.constraint(type = "full_investment") 
+  }else{
+    n_assets = length(assets_names)
+    max_box =  1- ((n_assets - 1) * min_box)
+    p_spec <- portfolio.spec(assets = assets_names) %>% 
+      add.constraint(type = "box", min=min_box, max=max_box) %>% 
+      add.constraint(type = "full_investment") 
+    
   }
   
   return(p_spec)
@@ -352,7 +447,7 @@ get.strats.KPIs <- function(strategies_list,name_pattern,year_file,RF=0,folder_n
       df_DD_all <- rbind(df_DD_all,df_DD)
       
       
-      }
+    }
     
   }
   
@@ -368,6 +463,8 @@ get.strats.KPIs <- function(strategies_list,name_pattern,year_file,RF=0,folder_n
   return(list(df_KPIS,df_DD_all))
   
 }
+
+
 
 
 
@@ -537,6 +634,636 @@ plot_compared_performance <- function(df_long_rets,title_plot,color_colum=group_
   
 }
 
+
+# Robustness Test --------------------------------------------------------------------------
+
+execute_backtest_box_constraints <- function(box_constraint){
+  
+  first_MVP_more4 <-  build.portfolio.strats("first_MVP_more4" ,
+                                             top4_first,
+                                             crypto_returns_xts,
+                                             first_train_period,
+                                             first_test_period,
+                                             box_constraint,
+                                             mvp.spec,
+                                             neg_to_zero = TRUE)
+  
+  second_MVP_more4 <-  build.portfolio.strats("second_MVP_more4" ,
+                                              top4_second,
+                                              crypto_returns_xts,
+                                              second_train_period,
+                                              second_test_period,
+                                              box_constraint,
+                                              mvp.spec,
+                                              neg_to_zero = TRUE)
+  
+  third_MVP_more4 <-  build.portfolio.strats("third_MVP_more4" ,
+                                             top4_third,
+                                             crypto_returns_xts,
+                                             third_train_period,
+                                             third_test_period,
+                                             box_constraint,
+                                             mvp.spec,
+                                             neg_to_zero = TRUE)
+  
+  first_MVP_less4 <-  build.portfolio.strats("first_MVP_less4" ,
+                                             bottom4_first,
+                                             crypto_returns_xts,
+                                             first_train_period,
+                                             first_test_period,
+                                             box_constraint,
+                                             mvp.spec,
+                                             neg_to_zero = TRUE)
+  
+  
+  second_MVP_less4 <-  build.portfolio.strats("second_MVP_less4" ,
+                                              bottom4_second,
+                                              crypto_returns_xts,
+                                              second_train_period,
+                                              second_test_period,
+                                              box_constraint,
+                                              mvp.spec,
+                                              neg_to_zero = TRUE)
+  
+  
+  third_MVP_less4 <-  build.portfolio.strats("third_MVP_less4" ,
+                                             bottom4_third,
+                                             crypto_returns_xts,
+                                             third_train_period,
+                                             third_test_period,
+                                             box_constraint,
+                                             mvp.spec,
+                                             neg_to_zero = TRUE)
+  
+  first_maxSR_more4 <-  build.portfolio.strats("first_maxSR_more4" ,
+                                               top4_first,
+                                               crypto_returns_xts,
+                                               first_train_period,
+                                               first_test_period,
+                                               box_constraint,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE)
+  
+  
+  second_maxSR_more4 <-  build.portfolio.strats("second_maxSR_more4" ,
+                                                top4_second,
+                                                crypto_returns_xts,
+                                                second_train_period,
+                                                second_test_period,
+                                                box_constraint,
+                                                tp.sepc,
+                                                maxSharp = TRUE,
+                                                neg_to_zero = TRUE)
+  
+  
+  third_maxSR_more4 <-  build.portfolio.strats("third_maxSR_more4" ,
+                                               top4_third,
+                                               crypto_returns_xts,
+                                               third_train_period,
+                                               third_test_period,
+                                               box_constraint,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE)
+  
+  first_maxSR_less4 <-  build.portfolio.strats("first_maxSR_less4" ,
+                                               bottom4_first,
+                                               crypto_returns_xts,
+                                               first_train_period,
+                                               first_test_period,
+                                               box_constraint,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE)
+  
+  
+  second_maxSR_less4 <-  build.portfolio.strats("second_maxSR_less4" ,
+                                                bottom4_second,
+                                                crypto_returns_xts,
+                                                second_train_period,
+                                                second_test_period,
+                                                box_constraint,
+                                                tp.sepc,
+                                                maxSharp = TRUE,
+                                                neg_to_zero = TRUE)
+  
+  
+  third_maxSR_less4 <-  build.portfolio.strats("third_maxSR_less4" ,
+                                               bottom4_third,
+                                               crypto_returns_xts,
+                                               third_train_period,
+                                               third_test_period,
+                                               box_constraint,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE)
+  
+  first_MVP_more8 <-  build.portfolio.strats("first_MVP_more8" ,
+                                             top8_first,
+                                             crypto_returns_xts,
+                                             first_train_period,
+                                             first_test_period,
+                                             box_constraint,
+                                             mvp.spec,
+                                             neg_to_zero = TRUE)
+  
+  second_MVP_more8 <-  build.portfolio.strats("second_MVP_more8" ,
+                                              top8_second,
+                                              crypto_returns_xts,
+                                              second_train_period,
+                                              second_test_period,
+                                              box_constraint,
+                                              mvp.spec,
+                                              neg_to_zero = TRUE)
+  
+  third_MVP_more8 <-  build.portfolio.strats("third_MVP_more8" ,
+                                             top8_third,
+                                             crypto_returns_xts,
+                                             third_train_period,
+                                             third_test_period,
+                                             box_constraint,
+                                             mvp.spec,
+                                             neg_to_zero = TRUE)
+  
+  
+  
+  
+  
+  ### More Inefficient cryptos
+  
+  
+  first_MVP_less8 <-  build.portfolio.strats("first_MVP_less8" ,
+                                             bottom8_first,
+                                             crypto_returns_xts,
+                                             first_train_period,
+                                             first_test_period,
+                                             box_constraint,
+                                             
+                                             mvp.spec,
+                                             neg_to_zero = TRUE)
+  
+  
+  second_MVP_less8 <-  build.portfolio.strats("second_MVP_less8" ,
+                                              bottom8_second,
+                                              crypto_returns_xts,
+                                              second_train_period,
+                                              second_test_period,
+                                              box_constraint,
+                                              
+                                              mvp.spec,
+                                              neg_to_zero = TRUE)
+  
+  
+  third_MVP_less8 <-  build.portfolio.strats("third_MVP_less8" ,
+                                             bottom8_third,
+                                             crypto_returns_xts,
+                                             third_train_period,
+                                             third_test_period,
+                                             box_constraint,
+                                             mvp.spec,
+                                             neg_to_zero = TRUE)
+  
+  first_maxSR_more8 <-  build.portfolio.strats("first_maxSR_more8" ,
+                                               top8_first,
+                                               crypto_returns_xts,
+                                               first_train_period,
+                                               first_test_period,
+                                               box_constraint,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE)
+  
+  
+  second_maxSR_more8 <-  build.portfolio.strats("second_maxSR_more8" ,
+                                                top8_second,
+                                                crypto_returns_xts,
+                                                second_train_period,
+                                                second_test_period,
+                                                box_constraint,
+                                                tp.sepc,
+                                                maxSharp = TRUE,
+                                                neg_to_zero = TRUE)
+  
+  
+  third_maxSR_more8 <-  build.portfolio.strats("third_maxSR_more8" ,
+                                               top8_third,
+                                               crypto_returns_xts,
+                                               third_train_period,
+                                               third_test_period,
+                                               box_constraint,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE)
+  
+  
+  
+  ### More Inefficient cryptos
+  
+  first_maxSR_less8 <-  build.portfolio.strats("first_maxSR_less8" ,
+                                               bottom8_first,
+                                               crypto_returns_xts,
+                                               first_train_period,
+                                               first_test_period,
+                                               box_constraint,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE)
+  
+  
+  second_maxSR_less8 <-  build.portfolio.strats("second_maxSR_less8" ,
+                                                bottom8_second,
+                                                crypto_returns_xts,
+                                                second_train_period,
+                                                second_test_period,
+                                                box_constraint,
+                                                tp.sepc,
+                                                maxSharp = TRUE,
+                                                neg_to_zero = TRUE)
+  
+  
+  
+  third_maxSR_less8 <-  build.portfolio.strats("third_maxSR_less8" ,
+                                               bottom8_third,
+                                               crypto_returns_xts,
+                                               third_train_period,
+                                               third_test_period,
+                                               box_constraint,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE)
+  
+  first_MVP <- build.portfolio.strats("first_MVP_index" ,
+                                      crypto_names,
+                                      crypto_returns_xts,
+                                      first_train_period,
+                                      first_test_period,
+                                      box_constraint,
+                                      mvp.spec,
+                                      neg_to_zero = TRUE)
+  
+  
+  second_MVP <- build.portfolio.strats("second_MVP_index" ,
+                                       crypto_names,
+                                       crypto_returns_xts,
+                                       second_train_period,
+                                       second_test_period,
+                                       box_constraint,
+                                       mvp.spec,
+                                       neg_to_zero = TRUE)
+  
+  
+  third_MVP <- build.portfolio.strats("third_MVP_index" ,
+                                      crypto_names,
+                                      crypto_returns_xts,
+                                      third_train_period,
+                                      third_test_period,
+                                      box_constraint,
+                                      mvp.spec,
+                                      neg_to_zero = TRUE)
+  
+  
+  
+  
+  first_maxSR <- build.portfolio.strats("first_maxSR_index" ,
+                                        crypto_names,
+                                        crypto_returns_xts,
+                                        first_train_period,
+                                        first_test_period,
+                                        box_constraint,
+                                        tp.sepc,
+                                        maxSharp = TRUE,
+                                        neg_to_zero = TRUE)
+  
+  
+  second_maxSR <- build.portfolio.strats("second_maxSR_index" ,
+                                         crypto_names,
+                                         crypto_returns_xts,
+                                         second_train_period,
+                                         second_test_period,
+                                         box_constraint,
+                                         tp.sepc,
+                                         maxSharp = TRUE,
+                                         neg_to_zero = TRUE)
+  
+  
+  third_maxSR <- build.portfolio.strats("third_maxSR_index" ,
+                                        crypto_names,
+                                        crypto_returns_xts,
+                                        third_train_period,
+                                        third_test_period,
+                                        box_constraint,
+                                        tp.sepc,
+                                        maxSharp = TRUE,
+                                        neg_to_zero = TRUE)
+  
+  
+  return(list(first_MVP,
+              
+              first_maxSR,
+              second_MVP,
+              second_maxSR,
+              third_MVP,
+              third_maxSR,
+              
+              
+              first_MVP_more4,
+              first_MVP_less4,
+              first_maxSR_more4,
+              first_maxSR_less4,
+              second_MVP_more4,
+              second_MVP_less4,
+              second_maxSR_more4,
+              second_maxSR_less4,
+              third_MVP_more4,
+              third_MVP_less4,
+              third_maxSR_more4,
+              third_maxSR_less4,
+              
+              first_MVP_more8,
+              first_MVP_less8,
+              first_maxSR_more8,
+              first_maxSR_less8,
+              second_MVP_more8,
+              second_MVP_less8,
+              second_maxSR_more8,
+              second_maxSR_less8,
+              third_MVP_more8,
+              third_MVP_less8,
+              third_maxSR_more8,
+              third_maxSR_less8))
+  
+}
+
+
+execute_backtest_maxSR_optimizor <- function(optm='ROI'){
+  
+  
+  
+  first_maxSR_more4 <-  build.portfolio.strats("first_maxSR_more4" ,
+                                               top4_first,
+                                               crypto_returns_xts,
+                                               first_train_period,
+                                               first_test_period,
+                                               pspec.lo.full,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE,
+                                               optimizor = optm)
+  
+  
+  second_maxSR_more4 <-  build.portfolio.strats("second_maxSR_more4" ,
+                                                top4_second,
+                                                crypto_returns_xts,
+                                                second_train_period,
+                                                second_test_period,
+                                                pspec.lo.full,
+                                                tp.sepc,
+                                                maxSharp = TRUE,
+                                                neg_to_zero = TRUE,
+                                                optimizor = optm)
+  
+  
+  third_maxSR_more4 <-  build.portfolio.strats("third_maxSR_more4" ,
+                                               top4_third,
+                                               crypto_returns_xts,
+                                               third_train_period,
+                                               third_test_period,
+                                               pspec.lo.full,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE,
+                                               optimizor = optm)
+  
+  first_maxSR_less4 <-  build.portfolio.strats("first_maxSR_less4" ,
+                                               bottom4_first,
+                                               crypto_returns_xts,
+                                               first_train_period,
+                                               first_test_period,
+                                               pspec.lo.full,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE,
+                                               optimizor = optm)
+  
+  
+  second_maxSR_less4 <-  build.portfolio.strats("second_maxSR_less4" ,
+                                                bottom4_second,
+                                                crypto_returns_xts,
+                                                second_train_period,
+                                                second_test_period,
+                                                pspec.lo.full,
+                                                tp.sepc,
+                                                maxSharp = TRUE,
+                                                neg_to_zero = TRUE,
+                                                optimizor = optm)
+  
+  
+  third_maxSR_less4 <-  build.portfolio.strats("third_maxSR_less4" ,
+                                               bottom4_third,
+                                               crypto_returns_xts,
+                                               third_train_period,
+                                               third_test_period,
+                                               pspec.lo.full,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE,
+                                               optimizor = optm)
+  
+  
+  
+  first_maxSR_more8 <-  build.portfolio.strats("first_maxSR_more8" ,
+                                               top8_first,
+                                               crypto_returns_xts,
+                                               first_train_period,
+                                               first_test_period,
+                                               pspec.lo.full,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE,
+                                               optimizor = optm)
+  
+  
+  second_maxSR_more8 <-  build.portfolio.strats("second_maxSR_more8" ,
+                                                top8_second,
+                                                crypto_returns_xts,
+                                                second_train_period,
+                                                second_test_period,
+                                                pspec.lo.full,
+                                                tp.sepc,
+                                                maxSharp = TRUE,
+                                                neg_to_zero = TRUE,
+                                                optimizor = optm)
+  
+  
+  third_maxSR_more8 <-  build.portfolio.strats("third_maxSR_more8" ,
+                                               top8_third,
+                                               crypto_returns_xts,
+                                               third_train_period,
+                                               third_test_period,
+                                               pspec.lo.full,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE,
+                                               optimizor = optm)
+  
+  
+  
+  ### More Inefficient cryptos
+  
+  first_maxSR_less8 <-  build.portfolio.strats("first_maxSR_less8" ,
+                                               bottom8_first,
+                                               crypto_returns_xts,
+                                               first_train_period,
+                                               first_test_period,
+                                               pspec.lo.full,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE,
+                                               optimizor = optm)
+  
+  
+  second_maxSR_less8 <-  build.portfolio.strats("second_maxSR_less8" ,
+                                                bottom8_second,
+                                                crypto_returns_xts,
+                                                second_train_period,
+                                                second_test_period,
+                                                pspec.lo.full,
+                                                tp.sepc,
+                                                maxSharp = TRUE,
+                                                neg_to_zero = TRUE,
+                                                optimizor = optm)
+  
+  
+  
+  third_maxSR_less8 <-  build.portfolio.strats("third_maxSR_less8" ,
+                                               bottom8_third,
+                                               crypto_returns_xts,
+                                               third_train_period,
+                                               third_test_period,
+                                               pspec.lo.full,
+                                               tp.sepc,
+                                               maxSharp = TRUE,
+                                               neg_to_zero = TRUE,
+                                               optimizor = optm)
+
+  
+  
+  
+  first_maxSR <- build.portfolio.strats("first_maxSR_index" ,
+                                        crypto_names,
+                                        crypto_returns_xts,
+                                        first_train_period,
+                                        first_test_period,
+                                        pspec.lo.full,
+                                        tp.sepc,
+                                        maxSharp = TRUE,
+                                        neg_to_zero = TRUE,
+                                        optimizor = optm)
+  
+  
+  second_maxSR <- build.portfolio.strats("second_maxSR_index" ,
+                                         crypto_names,
+                                         crypto_returns_xts,
+                                         second_train_period,
+                                         second_test_period,
+                                         pspec.lo.full,
+                                         tp.sepc,
+                                         maxSharp = TRUE,
+                                         neg_to_zero = TRUE,
+                                         optimizor = optm)
+  
+  
+  third_maxSR <- build.portfolio.strats("third_maxSR_index" ,
+                                        crypto_names,
+                                        crypto_returns_xts,
+                                        third_train_period,
+                                        third_test_period,
+                                        pspec.lo.full,
+                                        tp.sepc,
+                                        maxSharp = TRUE,
+                                        neg_to_zero = TRUE,
+                                        optimizor = optm)
+  
+  
+  strats_list <- list(
+    first_maxSR,
+    second_maxSR,
+    third_maxSR,
+    first_maxSR_more4,
+    first_maxSR_less4,
+    second_maxSR_more4,
+    second_maxSR_less4,
+    third_maxSR_more4,
+    third_maxSR_less4,
+    first_maxSR_more8,
+    first_maxSR_less8,
+    second_maxSR_more8,
+    second_maxSR_less8,
+    third_maxSR_more8,
+    third_maxSR_less8)
+  
+  
+  for(s in 1:length(strats_list)){
+    strats_list[[s]]$name <- paste(strats_list[[s]]$name,optm,sep = '_')
+  }
+  
+  
+  return(strats_list)
+  
+}
+
+
+get.RoubtsTest.KPIs <- function(strategies_list,name_pattern="_",RF=0){
+  df_KPIS <- data.frame()
+  df_DD_all <- data.frame()
+  
+  for (s in strategies_list){
+    if(grepl(name_pattern,s$name)){
+      print(s$name)
+      
+      df_cumrets <- totalReturn(s$R)  %>%  preprocess_kpi_table(strategy_name = s$name,
+                                                                test_period = s$test,
+                                                                KPI_family = "TotalReturn")
+      df_KPIS <- rbind(df_KPIS,df_cumrets)
+      
+      
+      df_returns <- table.AnnualizedReturns(s$R,Rf = RF) %>% preprocess_kpi_table(strategy_name = s$name,
+                                                                                  test_period = s$test,
+                                                                                  KPI_family = "AnnualizedReturns")
+      
+      df_KPIS <- rbind(df_KPIS,df_returns)
+      
+      
+      
+      df_DR <- table.DownsideRisk(s$R,MAR = 0, p=0.95)["Historical VaR (95%)",] %>% preprocess_kpi_table(strategy_name = s$name,
+                                                                                                         test_period = s$test,
+                                                                                                         KPI_family = "DownsideRisk")
+      
+      df_KPIS <- rbind(df_KPIS,df_DR)
+      
+      
+      
+    }
+    
+  }
+  
+  
+  
+  df_KPIS$variable <- ifelse(df_KPIS$variable == "Total Return","Cum Ret.",df_KPIS$variable)
+  df_KPIS$variable <- ifelse(df_KPIS$variable == "Annualized Return","Ann Ret.",df_KPIS$variable)
+  df_KPIS$variable <- ifelse(df_KPIS$variable == "Annualized Std Dev","Ann Vol.",df_KPIS$variable)
+  df_KPIS$variable <- ifelse(df_KPIS$variable == "Annualized Sharpe (Rf=0%)","SR",df_KPIS$variable)
+  df_KPIS$variable <- ifelse(df_KPIS$variable == "1","VaR (95%)",df_KPIS$variable)
+  df_KPIS$KPI <- NULL
+  
+  df_KPIS$Strategy_name <- str_replace(df_KPIS$Strategy_name , "first_", "")
+  df_KPIS$Strategy_name <- str_replace(df_KPIS$Strategy_name , "second_", "")
+  df_KPIS$Strategy_name <- str_replace(df_KPIS$Strategy_name , "third_", "")
+  
+  return(df_KPIS)
+  
+}
 
 
 
