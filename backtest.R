@@ -163,6 +163,29 @@ get_deltaH <- function(period){
   return(deltaH)
 }
 
+get_strats_weights <- function(strategies_list,group_name,folder_path="Results/Complete_Backtest/Weights/",export=FALSE){
+  # ONLY FOR STRATS WITH THE SAME ASSETS
+  
+  DFweights <- NULL
+  rnames <- c()
+  for(s in strategies_list){
+    
+    rnames <- append(rnames,s$name)
+    
+    DFweights <- rbind(DFweights,s$w)
+    
+  }
+  rownames(DFweights) <- rnames
+  DFweights <- DFweights %>%  round(4)
+  
+  if(export){
+    fname <-paste(folder_path,group_name,".csv",sep="")
+    DFweights %>% write.csv(fname)
+    
+  }
+  
+  return(DFweights)
+}
 
 
 execute_defaultpolicies <- function(opt,asset_names,train,test,status_efficiency ="most"){
@@ -212,7 +235,14 @@ execute_defaultpolicies <- function(opt,asset_names,train,test,status_efficiency
                                                 train,
                                                 test)
   
-  return(list(MVP,maxSR,EW,InvInef))
+  
+  strats <- list(MVP,maxSR,EW,InvInef)
+  
+  weights_Tab_name <- paste(status_efficiency,as.character(n_assets),test,sep='_')
+  
+  weights <- get_strats_weights(strategies_list = strats,group_name  = weights_Tab_name,export=TRUE)
+  
+  return(strats)
   
 }
 
@@ -241,8 +271,14 @@ compleate_backtest <- function(periods_keyval,optm='DEoptim',portfolio_sizes=c(4
     all_lessN <- list(lessN_first,lessN_second,lessN_third)
     
     
-    mostN_first_strats <-execute_defaultpolicies(opt=optm,asset_names=mostN_first,train=first_train_period,test=first_test_period,status_efficiency ="most")
-    mostN_second_strats <-execute_defaultpolicies(opt=optm,asset_names=mostN_second,train=second_train_period,test=second_test_period,status_efficiency ="most")
+    mostN_first_strats <-execute_defaultpolicies(opt=optm,
+                                                 asset_names=mostN_first,
+                                                 train=first_train_period,
+                                                 test=first_test_period,
+                                                 status_efficiency ="most")
+    
+    mostN_second_strats <-execute_defaultpolicies(opt=optm,
+                                                  asset_names=mostN_second,train=second_train_period,test=second_test_period,status_efficiency ="most")
     mostN_third_strats <-execute_defaultpolicies(opt=optm,asset_names=mostN_third,train=third_train_period,test=third_test_period,status_efficiency ="most")
     
     lessN_first_strats <-execute_defaultpolicies(opt=optm,asset_names=lessN_first,train=first_train_period,test=first_test_period,status_efficiency ="less")
@@ -261,8 +297,8 @@ compleate_backtest <- function(periods_keyval,optm='DEoptim',portfolio_sizes=c(4
     for(s in 1:length(mostN_third_strats)){
       strategies_backtest <- append(strategies_backtest,mostN_third_strats[s])
     }
-    for(s in 1:length(mostN_first_strats)){
-      strategies_backtest <- append(strategies_backtest,mostN_first_strats[s])
+    for(s in 1:length(lessN_first_strats)){
+      strategies_backtest <- append(strategies_backtest,lessN_first_strats[s])
     }
     
     for(s in 1:length(lessN_second_strats)){
@@ -309,34 +345,68 @@ get.Backtest.KPIs <- function(strategies_list,RF=0){
   
 }
 
-get.Backtest.KPIs(STRATS_DEOPTM_468)
+# get.Backtest.KPIs(STRATS_DEOPTM_468)
 
 
 STRATS_DEOPTM_468 <- compleate_backtest(PERIODS,optm = 'DEoptim')
 
+STRATS_DEOPTM_468[[29]]$name
+STRATS_DEOPTM_468[[29]]$w
 
-names_st <- c()
-for(i in 1:length( STRATS_DEOPTM_468)){
-  names_st <- append(names_st,STRATS_DEOPTM_468[[i]]$name)
-}
+STRATS_DEOPTM_468[[30]]$name
+STRATS_DEOPTM_468[[30]]$w
 
-names_st
+STRATS_DEOPTM_468[[31]]$name
+STRATS_DEOPTM_468[[31]]$w
 
-#
+STRATS_DEOPTM_468[[32]]$name
+STRATS_DEOPTM_468[[32]]$w
+
+
+STRATS_DEOPTM_468[[33]]$name
+STRATS_DEOPTM_468[[33]]$w
+
+STRATS_DEOPTM_468[[34]]$name
+STRATS_DEOPTM_468[[34]]$w
+
+STRATS_DEOPTM_468[[35]]$name
+STRATS_DEOPTM_468[[35]]$w
+
+STRATS_DEOPTM_468[[36]]$name
+STRATS_DEOPTM_468[[36]]$w
+
+
+STRATS_DEOPTM_468[[37]]$name
+STRATS_DEOPTM_468[[37]]$w
+
+STRATS_DEOPTM_468[[38]]$name
+STRATS_DEOPTM_468[[38]]$w
+
+
+STRATS_DEOPTM_468[[39]]$name
+STRATS_DEOPTM_468[[39]]$w
+
+
+STRATS_DEOPTM_468[[40]]$name
+STRATS_DEOPTM_468[[40]]$w
+
+
+
+
+
 
 KPIS_backtest <- get.Backtest.KPIs(STRATS_DEOPTM_468)
 
-for(y in c(2020,2021,2022)){
 
-  x <- KPIS_backtest %>%  
-    filter(Test_period == y) %>% 
-    pivot_wider(id_cols = Strategy_name,values_from = value,names_from = variable)  
-  print(x)
-}
+KPIS_backtest <- tibble::rownames_to_column(KPIS_backtest, "Strats_names")
+
+KPIS_backtest[c("Policy","Efficency_group","N_assets","Test_period")]<- str_split_fixed(KPIS_backtest$Strats_names, '_', 4)
 
 
+selected_kpis_cols <- c("Strats_names","Policy","Efficency_group","N_assets","Test_period","Total Return","Annualized Return","Annualized Std Dev","Annualized Sharpe (Rf=0%)","Historical VaR (95%)")
 
+KPIS_backtest <- KPIS_backtest[selected_kpis_cols]
 
-KPIS_backtest %>% filter(Test_period == 2020) %>% pivot_wider(id_cols = Strategy_name,values_from = value,names_from = variable)  
+KPIS_backtest  %>%  writexl::write_xlsx("Results/Complete_Backtest/BacktestKPIs.xlsx")
 
 

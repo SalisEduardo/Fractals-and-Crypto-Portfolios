@@ -31,14 +31,13 @@ lessN_second <- get_top_effic_names(effic_ranks,"RankEffic_2019_2020",top_effics
 mostN_third <- get_top_effic_names(effic_ranks,"RankEffic_2020_2021",top_effics = psize)
 lessN_third <- get_top_effic_names(effic_ranks,"RankEffic_2020_2021",top_effics = - psize)
 
-status_efficiency ="most"
-train = PERIODS[[1]]$train
-test = PERIODS[[1]]$test
+status_efficiency ="less"
+train = PERIODS[[3]]$train
+test = PERIODS[[3]]$test
 asset_names = mostN_first
 opt = 'DEoptim'
 n_assets = length(asset_names)
 
-periodDeltaH <- period_deltaH[[train]]
 
 
 get_deltaH <- function(period){
@@ -92,5 +91,7 @@ InvInef <- build.inverse.inefficency.strategy(paste("InvInef",status_efficiency,
                                               crypto_returns_xts,
                                               train,
                                               test)
-
-
+maxSR$w
+MVP$w
+maxSR$R %>%  mean()
+MVP$R %>%  mean()
