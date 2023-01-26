@@ -39,6 +39,17 @@ pspec.box.full <- function(assets_names, min_box ,max_box){
   return(p_spec)
 }
 
+
+pspec.box.relaxed <- function(assets_names, min_box=0.03 ,max_box=0.97){
+  p_spec <- portfolio.spec(assets = assets_names) %>% 
+    add.constraint(type = "box", min=min_box, max=max_box) %>% 
+    add.constraint(type = "full_investment") 
+  
+  
+  return(p_spec)
+}
+
+
 pspec.box.fullmax60 <- function(assets_names, min_box=0 ,max_box=0.6){
   p_spec <- portfolio.spec(assets = assets_names) %>% 
     add.constraint(type = "box", min=min_box, max=max_box) %>% 
@@ -196,7 +207,7 @@ minCVaR.spec <- function(p,args=list(p=0.95,clean="boudt",method='historical'),c
 # Strats implementation---------------------------------------------------------------------------------------------------
 
 
-build.portfolio.strats <- function(strats_name,assets_names,return_series,train_period,test_period,base_specs,strats_specs,optimizor='ROI',maxSharp=FALSE,neg_to_zero=FALSE){
+build.portfolio.strats <- function(strats_name,assets_names,return_series,train_period,test_period,base_specs,strats_specs,optimizor='ROI',maxSharp=FALSE,neg_to_zero=FALSE,active_trace=TRUE){
   portfolio_specs <- assets_names %>% base_specs %>% strats_specs
   
   if(maxSharp){
@@ -204,12 +215,12 @@ build.portfolio.strats <- function(strats_name,assets_names,return_series,train_
                                          portfolio_specs, 
                                          maxSR=TRUE,
                                          optimize_method = optimizor,
-                                         trace=TRUE)
+                                         trace=active_trace)
   }else{
     optimize_train <- optimize.portfolio(return_series[train_period,assets_names] , 
                                          portfolio_specs,
                                          optimize_method = optimizor,
-                                         trace=TRUE)
+                                         trace=active_trace)
   }
   
   

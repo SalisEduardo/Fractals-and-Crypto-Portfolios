@@ -188,45 +188,131 @@ get_strats_weights <- function(strategies_list,group_name,folder_path="Results/C
 }
 
 
+# execute_defaultpolicies <- function(opt,asset_names,train,test,status_efficiency ="most"){
+#   
+#   periodDeltaH <- get_deltaH(train)
+#   
+#   n_assets <- length(asset_names)
+#   
+#   MVP <-  build.portfolio.strats( paste("MVP",status_efficiency,as.character(n_assets),test,sep='_'),
+#                                   asset_names,
+#                                   crypto_returns_xts,
+#                                   train,
+#                                   test,
+#                                   pspec.box.relaxed,
+#                                   mvp.spec, 
+#                                   neg_to_zero = TRUE,
+#                                   optimizor = opt,
+#                                   active_trace = FALSE)
+#   
+#   
+#   
+#   
+#   
+#   maxSR <-  build.portfolio.strats(paste("maxSR",status_efficiency,as.character(n_assets),test,sep='_'),
+#                                    asset_names,
+#                                    crypto_returns_xts,
+#                                    train,
+#                                    test,
+#                                    pspec.box.relaxed,
+#                                    tp.sepc,
+#                                    maxSharp = TRUE,
+#                                    neg_to_zero = TRUE,
+#                                    optimizor = opt,
+#                                    active_trace = FALSE)
+#   
+#   
+#   EW <- build.EW.portfolio( paste("EW",status_efficiency,as.character(n_assets),test,sep='_'),
+#                             asset_names,
+#                             crypto_returns_xts,
+#                             train,
+#                             test)
+#   
+#   
+#   weights_InvInef <- format.InvInef.weights.df(periodDeltaH,colnames(periodDeltaH)[2],asset_names)
+#   
+#   InvInef <- build.inverse.inefficency.strategy(paste("InvInef",status_efficiency,as.character(n_assets),test,sep='_'),
+#                                                 weights_InvInef,
+#                                                 crypto_returns_xts,
+#                                                 train,
+#                                                 test)
+#   
+#   
+#   strats <- list(MVP,maxSR,EW,InvInef)
+#   
+#   weights_Tab_name <- paste(status_efficiency,as.character(n_assets),test,sep='_')
+#   
+#   weights <- get_strats_weights(strategies_list = strats,group_name  = weights_Tab_name,export=TRUE)
+#   
+#   return(strats)
+#   
+# }
+
+
+
 execute_defaultpolicies <- function(opt,asset_names,train,test,status_efficiency ="most"){
-  
+  # Specs
   periodDeltaH <- get_deltaH(train)
   
   n_assets <- length(asset_names)
   
-  MVP <-  build.portfolio.strats( paste("MVP",status_efficiency,as.character(n_assets),test,sep='_'),
-                                  asset_names,
-                                  crypto_returns_xts,
-                                  train,
-                                  test,
-                                  pspec.lo.full,
-                                  mvp.spec, 
-                                  neg_to_zero = TRUE,
-                                  optimizor = opt)
+  portfolio_specs  <-  asset_names %>% portfolio.spec(assets = asset_names) %>% 
+    add.constraint(type = "box",min=0.01, max=0.99) %>% 
+    add.constraint(type = "full_investment") 
   
+  #MVP
+  MVP_opt <- optimize.portfolio(crypto_returns_xts[train,asset_names] , 
+                    portfolio_specs,
+                    optimize_method = opt,
+                    trace=FALSE,search_size = 100000 )
   
+  mvp_weights <- ifelse(extractWeights(MVP_opt) < 0, 0, extractWeights(MVP_opt )) %>%  
+    as.data.frame() %>% 
+    t() %>% 
+    as.data.frame()
   
+  MVP <- list(
+    name = paste("MVP",status_efficiency,as.character(n_assets),test,sep='_'),
+    p = portfolio_specs,
+    train = train,
+    test = test,
+    opt = MVP_opt,
+    w  =  mvp_weights ,
+    R = Return.portfolio(crypto_returns_xts[test,asset_names],
+                         weights = ifelse(extractWeights(MVP_opt) < 0, 0, extractWeights(MVP_opt)))
+  )
   
+  #maxSR
+  maxSR_opt <- optimize.portfolio(crypto_returns_xts[train,asset_names] , 
+                                  portfolio_specs,
+                                  optimize_method = opt,
+                                  maxSR=TRUE,
+                                  trace=FALSE,search_size = 100000)
   
-  maxSR <-  build.portfolio.strats(paste("maxSR",status_efficiency,as.character(n_assets),test,sep='_'),
-                                   asset_names,
-                                   crypto_returns_xts,
-                                   train,
-                                   test,
-                                   pspec.lo.full,
-                                   tp.sepc,
-                                   maxSharp = TRUE,
-                                   neg_to_zero = TRUE,
-                                   optimizor = opt)
+  maxsr_weights <- ifelse(extractWeights(maxSR_opt) < 0, 0, extractWeights(maxSR_opt )) %>%  
+    as.data.frame() %>% 
+    t() %>% 
+    as.data.frame()
   
+  maxSR <- list(
+    name = paste("maxSR",status_efficiency,as.character(n_assets),test,sep='_'),
+    p = portfolio_specs,
+    train = train,
+    test = test,
+    opt = maxSR_opt,
+    w  =  maxsr_weights ,
+    R = Return.portfolio(crypto_returns_xts[test,asset_names],
+                         weights = ifelse(extractWeights(maxSR_opt) < 0, 0, extractWeights(maxSR_opt)))
+  )
   
+  #Equal weight
   EW <- build.EW.portfolio( paste("EW",status_efficiency,as.character(n_assets),test,sep='_'),
                             asset_names,
                             crypto_returns_xts,
                             train,
                             test)
   
-  
+  #Inverse Inefficiency
   weights_InvInef <- format.InvInef.weights.df(periodDeltaH,colnames(periodDeltaH)[2],asset_names)
   
   InvInef <- build.inverse.inefficency.strategy(paste("InvInef",status_efficiency,as.character(n_assets),test,sep='_'),
@@ -350,48 +436,14 @@ get.Backtest.KPIs <- function(strategies_list,RF=0){
 
 STRATS_DEOPTM_468 <- compleate_backtest(PERIODS,optm = 'DEoptim')
 
-STRATS_DEOPTM_468[[29]]$name
-STRATS_DEOPTM_468[[29]]$w
-
-STRATS_DEOPTM_468[[30]]$name
-STRATS_DEOPTM_468[[30]]$w
-
-STRATS_DEOPTM_468[[31]]$name
-STRATS_DEOPTM_468[[31]]$w
-
-STRATS_DEOPTM_468[[32]]$name
-STRATS_DEOPTM_468[[32]]$w
 
 
-STRATS_DEOPTM_468[[33]]$name
-STRATS_DEOPTM_468[[33]]$w
-
-STRATS_DEOPTM_468[[34]]$name
-STRATS_DEOPTM_468[[34]]$w
-
-STRATS_DEOPTM_468[[35]]$name
-STRATS_DEOPTM_468[[35]]$w
-
-STRATS_DEOPTM_468[[36]]$name
-STRATS_DEOPTM_468[[36]]$w
+STRATS_DEOPTM_468[[45]]$name 
+STRATS_DEOPTM_468[[45]]$w
 
 
-STRATS_DEOPTM_468[[37]]$name
-STRATS_DEOPTM_468[[37]]$w
-
-STRATS_DEOPTM_468[[38]]$name
-STRATS_DEOPTM_468[[38]]$w
-
-
-STRATS_DEOPTM_468[[39]]$name
-STRATS_DEOPTM_468[[39]]$w
-
-
-STRATS_DEOPTM_468[[40]]$name
-STRATS_DEOPTM_468[[40]]$w
-
-
-
+STRATS_DEOPTM_468[[46]]$name 
+STRATS_DEOPTM_468[[46]]$w 
 
 
 
