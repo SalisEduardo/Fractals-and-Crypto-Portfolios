@@ -280,6 +280,11 @@ calc.inverse.inefficiency.weights <- function(fractality,axis=0){
   
 }
 
+
+
+
+
+
 format.InvInef.weights.df <- function(assets_fract,fracl_column,selected_assets_names){
   assets_fract <- assets_fract[fracl_column] %>%  t() %>%  as.data.frame()
   colnames(assets_fract) <- selected_assets_names
@@ -288,6 +293,8 @@ format.InvInef.weights.df <- function(assets_fract,fracl_column,selected_assets_
   assets_fract <- assets_fract %>% calc.inverse.inefficiency.weights(axis = 1)
   return(assets_fract)
 }
+
+
 
 build.inverse.inefficency.strategy <- function(strats_name,initial_weights,return_series,train_period,test_period){
   
@@ -308,6 +315,63 @@ build.inverse.inefficency.strategy <- function(strats_name,initial_weights,retur
   ))
   
 }
+
+
+calc.inefficiency.weights <- function(fractality,axis=0){
+  if(axis==0){
+    
+    sum_fractality <- sum(fractality)
+    weights <- fractality/sum_fractality
+    
+  }else if(axis==1){
+    
+    sum_fractality  <- rowSums(fractality)
+    weights <- fractality/sum_fractality
+  }
+  
+  
+  return(weights)
+  
+}
+
+format.PropInef.weights.df <- function(assets_fract,fracl_column,selected_assets_names){
+  assets_fract <- assets_fract[fracl_column] %>%  t() %>%  as.data.frame()
+  colnames(assets_fract) <- selected_assets_names
+  assets_fract <- assets_fract[selected_assets_names]
+  rownames(assets_fract) <- NULL
+  assets_fract <- assets_fract %>% calc.inefficiency.weights(axis = 1)
+  return(assets_fract)
+}
+
+
+build.prop.inefficency.strategy <- function(strats_name,initial_weights,return_series,train_period,test_period){
+  
+  R <- return_series[test_period,colnames(initial_weights)] #Ordering the columns and selecting the test period
+  weights_vec <- as.numeric(initial_weights)
+  
+  InvInef_returns <- Return.portfolio(R,weights = weights_vec)
+  
+  #rownames(initial_weights) <- strats_name
+  
+  return(list(
+    name = strats_name,
+    train = train_period,
+    assets = colnames(initial_weights),
+    test = test_period,
+    w  =  initial_weights,
+    R = InvInef_returns
+  ))
+  
+}
+
+
+
+
+
+
+
+
+
 
 
 
