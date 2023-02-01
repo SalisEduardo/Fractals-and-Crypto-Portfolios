@@ -224,7 +224,9 @@ get.Backtest.KPIs <- function(strategies_list,RF=0){
     df_KPIS_strat <- rbind(
       totalReturn(s$R),
       table.AnnualizedReturns(s$R,Rf = RF),
-      table.DownsideRisk(s$R,MAR = 0, p=0.95)
+      table.DownsideRisk(s$R,MAR = 0, p=0.95),
+      table.Distributions(s$R)
+      
     )
     colnames(df_KPIS_strat) <- c(s$name)
     df_KPIS_strat <- df_KPIS_strat %>% t() %>% as.data.frame() 
