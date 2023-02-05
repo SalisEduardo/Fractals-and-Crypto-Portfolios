@@ -72,7 +72,7 @@ KPIS_backtest_4 <- get.Backtest.KPIs(STRATS_DEOPTM_4)
 
 KPIS_backtest_4 <- tibble::rownames_to_column(KPIS_backtest_4, "Strats_names")
 
-KPIS_backtest_4[c("Policy","Efficiency_group","N_assets","Test_period")]<- str_split_fixed(KPIS_backtest_4$Strats_names, '_', 4)
+KPIS_backtest_4[c("Policy","Efficency_group","N_assets","Test_period")]<- str_split_fixed(KPIS_backtest_4$Strats_names, '_', 4)
 
 KPIS_backtest_4  %>%  writexl::write_xlsx("Results/Complete_Backtest/BacktestKPIs_itearation.xlsx")
 

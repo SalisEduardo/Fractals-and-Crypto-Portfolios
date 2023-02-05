@@ -97,6 +97,9 @@ view(df_weights)
 
 df_weights %>%  writexl::write_xlsx("Test_weights.xlsx")
 
+Return.portfolio(crypto_returns_xts[test,asset_names],weights = colMeans(w))
+
+
 # specs <-asset_names %>%  
 #   portfolio.spec() %>% 
 #   

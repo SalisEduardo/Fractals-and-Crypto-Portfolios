@@ -644,11 +644,11 @@ get_top_effic_names <- function(df_ranks,rankCol,top_effics){
 
 gatther_Rets <- function(strategies_list,name_pattern = NULL){
   if(is.null(name_pattern) == FALSE){
-    selected_list <- keep(strategies_list, function(s) grepl(name_pattern,s$name))
+    strategies_list <- keep(strategies_list, function(s) grepl(name_pattern,s$name))
   }
   
-  returns_list <- lapply(selected_list, function(x){x$R})
-  names_col <- lapply(selected_list, function(x){x$name}) 
+  returns_list <- lapply(strategies_list, function(x){x$R})
+  names_col <- lapply(strategies_list, function(x){x$name}) 
   
   series_returns <- do.call(merge,returns_list)
   
