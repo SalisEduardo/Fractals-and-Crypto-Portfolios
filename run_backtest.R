@@ -43,6 +43,10 @@ KPIS_backtest_index[c("Policy","Efficency_group","N_assets","Test_period")]<- st
 
 KPIS_backtest_index  %>%  writexl::write_xlsx("Results/Complete_Backtest/BacktestKPIs_index_iteration.xlsx")
 
+saveRDS(STRATS_DEOPTM_index, file = "STRATS_DEOPTM_index.RDS") 
+saveRDS(KPIS_backtest_index, file = "KPIS_backtest_index.RDS")  
+
+
 
 # Backtest Portfolio of  4, 6 , 8 Cryptos -------------------------------
 STRATS_DEOPTM_468 <- compleate_backtest_v2(PERIODS,optm = 'DEoptim',path_weights="Results/Complete_Backtest/Weights_iteration_v2/")
