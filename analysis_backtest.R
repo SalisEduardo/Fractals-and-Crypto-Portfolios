@@ -24,7 +24,7 @@ source("risk_free.R") # obtaining risk free data
 source('load_data.R') # Load all needed data
 
 
-policy_keyval <- c("maxSR"="MSR","EW"="EWP","PropInef"="INBP","InvInef"="EPB")
+policy_keyval <- c("maxSR"="MSR","EW"="EWP","PropInef"="INBP","InvInef"="EBP")
 
 # Results of 4 crypto's Portfolio
 
@@ -43,8 +43,8 @@ KPIS_backtest_index <- readRDS(file = "KPIS_backtest_index.RDS")
 KPIS_backtest_index <- KPIS_backtest_index %>% 
   dplyr::rename("Efficiency_group"=Efficency_group) %>% #spelling mistake
   dplyr::mutate(`Annualized Std Dev` = `Annualized Std Dev` * sqrt(360/252)) %>% # Annualize by 360
-  dplyr::mutate(Policy = ifelse(KPIS_backtest_index$Policy %in% names(policy_keyval), policy_keyval[KPIS_backtest_index$Policy], KPIS_backtest_index$Policy))
-
+  dplyr::mutate(Policy = ifelse(KPIS_backtest_index$Policy %in% names(policy_keyval), policy_keyval[KPIS_backtest_index$Policy], KPIS_backtest_index$Policy)) %>% 
+  dplyr::mutate(Efficiency_group = ifelse(Efficiency_group == "index", "all",Efficiency_group))
 
 
 ALL_KPI <- rbind(KPIS_backtest_4,KPIS_backtest_index)
@@ -86,25 +86,37 @@ scatterplot_risk_return <- function(kpi,year,n_assets = NULL,folder_path="Result
                    color=Efficiency_group,
                    shape = Efficiency_group,
                    size= `Annualized Sharpe (Rf=0%)`)) +
-    geom_vline(xintercept =  mean(KPIS_backtest_4[KPIS_backtest_4$Test_period == year,"Annualized Std Dev"]))+
-    geom_hline(yintercept =  mean(KPIS_backtest_4[KPIS_backtest_4$Test_period == year,"Annualized Return"]))+
+    scale_size_continuous(guide = "none") +
+    geom_vline(xintercept =  mean(KPIS_backtest_4[KPIS_backtest_4$Test_period == year,"Annualized Std Dev"]),size = 1.5, linetype = "dashed",color = "darkblue")+
+    
+    geom_hline(yintercept =  mean(KPIS_backtest_4[KPIS_backtest_4$Test_period == year,"Annualized Return"]),size = 1.5, linetype = "dashed",color = "darkblue")+
+ 
     geom_text_repel(aes(x = `Annualized Std Dev`,
                         y=`Annualized Return`,
                         color=Efficiency_group,
                         label=Policy),
-                    hjust=0, vjust=0) + 
+                    hjust=0, vjust=0,show.legend = FALSE) + 
     xlab(latex2exp::TeX("$\\sigma^A_p$")) + 
     ylab(latex2exp::TeX("$r^A_p$")) + 
   
     labs(title = "",color="Efficiency Level",shape="Efficiency Level",size=latex2exp::TeX("$SR_p$")) + 
-    theme_bw()
+    theme_bw()+  
+    guides(shape = guide_legend(override.aes = list(size = 8)),
+           color = guide_legend(override.aes = list(size = 4)))  + 
+    theme(legend.title = element_text(size = 20), 
+          legend.text = element_text(size = 20),
+          legend.key.size = unit(2, "lines"),
+          axis.line = element_line(size = 2),
+          axis.text=element_text(size=17.5),
+          axis.title=element_text(size=20,face="bold"))
+  
   ggsave(file_plt,plt)
   plt
 }
 
 
 
-scatterplot_risk_return(KPIS_backtest_4,year = '2020')
+scatterplot_risk_return(KPIS_backtest_4,year = '2020') 
 scatterplot_risk_return(KPIS_backtest_4,year = '2021')
 scatterplot_risk_return(KPIS_backtest_4,year = '2022')
 
@@ -169,7 +181,8 @@ ALL_cumrets_2020 <- rbind(cumrets2020_index,cumrets2020_4cryptos) %>%  arrange(S
 ALL_cumrets_2021 <- rbind(cumrets2021_index,cumrets2021_4cryptos) %>%  arrange(Strat,Date)
 ALL_cumrets_2022 <- rbind(cumrets2022_index,cumrets2022_4cryptos) %>%  arrange(Strat,Date)
 
-ALL_periods_strategies_cumrets <- rbind(ALL_cumrets_2020,ALL_cumrets_2021,ALL_cumrets_2022)
+ALL_periods_strategies_cumrets <- rbind(ALL_cumrets_2020,ALL_cumrets_2021,ALL_cumrets_2022) %>% 
+  dplyr::mutate(Efficiency_group = ifelse(Efficiency_group == "index", "all",Efficiency_group))
 
 
 plot_all_ts <- function(df_cumrets){
@@ -237,8 +250,15 @@ plot_all_ts_v2 <- function(df_cumrets,folder_path="Results/Plots_Backtest/"){
         ggplot(aes(x=Date,y=return)) +
         geom_line(aes(color = Efficiency_group,linetype = Efficiency_group), size = 1,alpha=0.68) +
         ylab(latex2exp::TeX("$r^C_p$"))+
-        labs(x="",color='Efficiency Level',linetype = 'Efficiency Level',title = y)+
-        theme_classic()
+        labs(x="",color='',linetype = '',title = y)+
+        theme_classic() + 
+         
+        theme(legend.title = element_text(size = 15), 
+              legend.text = element_text(size = 15),
+              legend.key.size = unit(2, "lines"),
+              axis.line = element_line(size = 1.5),
+              axis.text=element_text(size=15),
+              axis.title=element_text(size=15,face="bold"))
       
       portfolios_plt_list[[k]] <- plt
       k <- k + 1 
