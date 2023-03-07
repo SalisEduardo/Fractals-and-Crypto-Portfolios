@@ -29,8 +29,8 @@ policy_keyval <- c("maxSR"="MSR","EW"="EWP","PropInef"="INBP","InvInef"="EBP")
 # Results of 4 crypto's Portfolio
 
 
-STRATS_DEOPTM_4 <- readRDS(file = "STRATS_DEOPTM_4.RDS") 
-KPIS_backtest_4 <- readRDS(file = "KPIS_backtest_4.RDS")  
+STRATS_DEOPTM_4 <- readRDS(file = "RData Objects/STRATS_DEOPTM_4.RDS") 
+KPIS_backtest_4 <- readRDS(file = "RData Objects/KPIS_backtest_4.RDS")  
 KPIS_backtest_4 <- KPIS_backtest_4 %>% 
   dplyr::mutate(`Annualized Std Dev` = `Annualized Std Dev` * sqrt(360/252)) %>% # Annualize by 360
   dplyr::mutate(Efficiency_group = ifelse(KPIS_backtest_4$Efficiency_group=="most","more",KPIS_backtest_4$Efficiency_group)) %>% 
@@ -38,13 +38,22 @@ KPIS_backtest_4 <- KPIS_backtest_4 %>%
 
 
 
-STRATS_DEOPTM_index <- readRDS(file = "STRATS_DEOPTM_index.RDS") 
-KPIS_backtest_index <- readRDS(file = "KPIS_backtest_index.RDS") 
+STRATS_DEOPTM_index <- readRDS(file = "RData Objects/STRATS_DEOPTM_index.RDS") 
+KPIS_backtest_index <- readRDS(file = "RData Objects/KPIS_backtest_index.RDS") 
 KPIS_backtest_index <- KPIS_backtest_index %>% 
   dplyr::rename("Efficiency_group"=Efficency_group) %>% #spelling mistake
   dplyr::mutate(`Annualized Std Dev` = `Annualized Std Dev` * sqrt(360/252)) %>% # Annualize by 360
   dplyr::mutate(Policy = ifelse(KPIS_backtest_index$Policy %in% names(policy_keyval), policy_keyval[KPIS_backtest_index$Policy], KPIS_backtest_index$Policy)) %>% 
   dplyr::mutate(Efficiency_group = ifelse(Efficiency_group == "index", "all",Efficiency_group))
+
+
+
+
+
+
+
+
+
 
 
 ALL_KPI <- rbind(KPIS_backtest_4,KPIS_backtest_index)
@@ -183,6 +192,14 @@ ALL_cumrets_2022 <- rbind(cumrets2022_index,cumrets2022_4cryptos) %>%  arrange(S
 
 ALL_periods_strategies_cumrets <- rbind(ALL_cumrets_2020,ALL_cumrets_2021,ALL_cumrets_2022) %>% 
   dplyr::mutate(Efficiency_group = ifelse(Efficiency_group == "index", "all",Efficiency_group))
+
+
+ALL_daily_rets <- merge(all_dailyrets_index,all_dailyrets_4cryptos) 
+All_cumrets_wideformat <- calc_cumrets(ALL_daily_rets)
+writexl::write_xlsx(ALL_periods_strategies_cumrets,'Results/Portfolios Time Series/Cummulativereturns_longformat.xlsx')
+writexl::write_xlsx(ALL_daily_rets,'Results/Portfolios Time Series/Dailyreturns_wideformat.xlsx')
+writexl::write_xlsx(ALL_daily_rets,'Results/Portfolios Time Series/All_cumrets_wideformat.xlsx')
+
 
 
 plot_all_ts <- function(df_cumrets){
